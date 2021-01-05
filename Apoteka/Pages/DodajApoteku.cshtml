@@ -1,0 +1,71 @@
+﻿@page
+@model Apoteka.Pages.DodajApotekuModel
+@{
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <h4>Dodaj apoteku</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label hidden asp-for="Apoteka.ApotekaID"></label>
+                <input hidden asp-for="Apoteka.ApotekaID" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apoteka.Naziv">Naziv 111: </label>
+                <input asp-for="Apoteka.Naziv" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apoteka.Email">Email: </label>
+                <input asp-for="Apoteka.Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apoteka.Direktor">Direktor: </label>
+                <input asp-for="Apoteka.Direktor" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apoteka.BrojTelefona">Broj telefona: </label>
+                <input asp-for="Apoteka.BrojTelefona" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Broj lokacije:</label>
+                <input type="number" min="1" class="form-control bend" id="brclanova">
+                <button type="button" class="btn btn-outline-dark" value="CREATE" id="btnNoOfRec" style="margin-top: 5px;">Unesi clanove (opciono)</button>
+            </div>
+            <div id="ClanoviDiv">
+
+            </div>
+
+            <button type="submit" asp-page-handler="Dodaj" class="btn btn-primary">Dodaj apoteku</button>
+        </form>
+        </div>
+    </div>
+
+
+        <script src="~/temp/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#btnNoOfRec").click(function () {
+                    $('#ClanoviDiv').empty();
+                    var NoOfRec = $('#brclanova').val();
+
+                    if (NoOfRec > 0) {
+                        createControl(NoOfRec);
+                    }
+                });
+
+                function createControl(NoOfRec) {
+                    var tbl = "";
+
+                    tbl = "<table>" + "<tr>" + "<th>Grad</th>" + "<th>Ulica i broj</th>" + "<th>Broj telefona</th>" + "</tr>";
+                    for (var i = 0; i < NoOfRec; i++) {
+                        tbl += "<tr>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].Grad' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].UlicaBr' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].BrojTelefona' />" + "</td>" + "</tr>";
+                    }
+                    tbl += "</table>";
+                    $('#ClanoviDiv').append(tbl);
+                }
+            });
+        </script>
