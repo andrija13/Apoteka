@@ -9,6 +9,7 @@ using Apoteka.Models;
 using Microsoft.AspNetCore.Identity;
 using Neo4jClient.DataAnnotations;
 using Neo4jClient;
+using Newtonsoft.Json;
 
 namespace Apoteka.Pages
 {
@@ -31,24 +32,49 @@ namespace Apoteka.Pages
         public void OnGet()
         {
 
+            //var apoteka = _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("(n.Naziv = '" + naziv + "')").Return(n => n.As<Node<string>>());
+            //var rez = apoteka.Results.Single();
+
+            ////List<ApotekaModel> ap = rez.Select(node => JsonConvert.DeserializeObject<ApotekaModel>(node.Data)).ToList();
+            //ApotekaModel ap = JsonConvert.DeserializeObject<ApotekaModel>(rez.Data);
+            //string id = rez.Reference.Id.ToString();
+
         }
 
         public async Task<IActionResult> OnPostDodajAsync()
         {
 
             var korisnik = await _userManager.GetUserAsync(User);
-            Apoteka.Nadlezni = korisnik;
 
-            await _context.GraphClient.Cypher.Create("(n:Apoteka { id:'" + Apoteka.ApotekaID + "', naziv:'" + Apoteka.Naziv +
-               "', email:'" + Apoteka.Email + "', direktor:'" + Apoteka.Direktor + "', brojtelefona:'" + Apoteka.BrojTelefona + "', nadlezni:'" + Apoteka.Nadlezni + "'}) return n").ExecuteWithoutResultsAsync();
+            await _context.GraphClient.Cypher.Create("(n:Apoteka { ApotekaID:'" + Apoteka.ApotekaID + "', Naziv:'" + Apoteka.Naziv +
+               "', Email:'" + Apoteka.Email + "', Direktor:'" + Apoteka.Direktor + "', BrojTelefona:'" + Apoteka.BrojTelefona + "'}) return n").ExecuteWithoutResultsAsync();
+
+
+            await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:IdentityUser)").Where("a.Naziv ='" + Apoteka.Naziv + "' AND a.Direktor='" + Apoteka.Direktor + "' AND b.UserName= '" + korisnik.UserName+ "'")
+                    .Create("(b)-[r:POSEDUJE]->(a) return type(r)").ExecuteWithoutResultsAsync();
+
+            var apoteka = _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("n.Naziv = '" + Apoteka.Naziv + "' AND n.Direktor= '"+Apoteka.Direktor+ "'").Return(n => n.As<Node<string>>());
+            var rez = apoteka.Results.Single();
+            string id = rez.Reference.Id.ToString();
+            
+            await _context.GraphClient.Cypher.Match("(n:Apoteka { Naziv:'" + Apoteka.Naziv + "', Direktor:'" + Apoteka.Direktor + "'})").Set("n.ApotekaID = " + id).ExecuteWithoutResultsAsync();
 
             foreach (Lokacija lok in Lokacije)
             {
-                await _context.GraphClient.Cypher.Create("(n:Lokacija { id:'" + lok.ID + "', grad:'" + lok.Grad + "', ulicabroj:'"+ lok.UlicaBr+
-               "', brojtelefona:'" + lok.BrojTelefona + "'}) return n").ExecuteWithoutResultsAsync();
+                if (lok != null)
+                {
+                    await _context.GraphClient.Cypher.Create("(n:Lokacija { ID:'" + lok.ID + "', Grad:'" + lok.Grad + "', UlicaBr:'" + lok.UlicaBr +
+                   "', BrojTelefona:'" + lok.BrojTelefona + "'}) return n").ExecuteWithoutResultsAsync();
 
-                await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:Lokacija)").Where("a.naziv ='" + Apoteka.Naziv + "' AND a.direktor='"+Apoteka.Direktor+"' AND b.grad ='" + lok.Grad + "' AND b.ulicabroj= '" + lok.UlicaBr + "'")
-                    .Create("(a)-[r:SE_NALAZI_U]->(b) return type(r)").ExecuteWithoutResultsAsync();
+                    var lokacija = _context.GraphClient.Cypher.Match("(n:Lokacija)").Where("n.Grad = '" + lok.Grad + "' AND n.UlicaBr= '" + lok.UlicaBr + "'").Return(n => n.As<Node<string>>());
+                    var r = apoteka.Results.Single();
+                    string idl = rez.Reference.Id.ToString();
+
+                    await _context.GraphClient.Cypher.Match("(n:Lokacija { Grad:'" + lok.Grad + "', UlicaBr:'" + lok.UlicaBr + "'})").Set("n.ID = " + idl).ExecuteWithoutResultsAsync();
+
+                    await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:Lokacija)").Where("a.Naziv ='" + Apoteka.Naziv + "' AND a.Direktor='" + Apoteka.Direktor + "' AND b.Grad ='" + lok.Grad + "' AND b.UlicaBr= '" + lok.UlicaBr + "'")
+                        .Create("(a)-[r:SE_NALAZI_U]->(b) return type(r)").ExecuteWithoutResultsAsync();
+                }
             }
   
             return RedirectToPage();

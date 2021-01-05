@@ -14,7 +14,6 @@ namespace Apoteka.Models
         public string Naziv { get; set; }
         public string Email { get; set; }
         public string Direktor { get; set; }
-        public Korisnik Nadlezni { get; set; }
         public string BrojTelefona { get; set; }
     }
 }

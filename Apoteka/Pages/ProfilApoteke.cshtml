@@ -2,4 +2,58 @@
 @model Apoteka.Pages.ProfilApotekeModel
 @{
 }
- 
+<div class="row">
+    <div class="col-md-4">
+        <form method="get">
+            <h4>Profil apoteke</h4>
+            <hr />
+
+            <div class="form-group">
+                <label hidden asp-for="Apoteka.ApotekaID"></label>
+                <input hidden asp-for="Apoteka.ApotekaID" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apoteka.Naziv">Naziv apoteke: </label>
+                <input asp-for="Apoteka.Naziv" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apoteka.Email">Email: </label>
+                <input asp-for="Apoteka.Email" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apoteka.Direktor">Direktor: </label>
+                <input asp-for="Apoteka.Direktor" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="Apoteka.BrojTelefona">Broj telefona: </label>
+                <input asp-for="Apoteka.BrojTelefona" class="form-control" disabled />
+            </div>
+                
+                    @if (@Model.Lokacije.Count > 0)
+                    {
+                    <table class="tabela" table table-dark>
+                        <thead>
+                        <th>Grad <ion-icon name="people-outline" style="font-size: 20px; vertical-align: sub;"></ion-icon></th>
+                        <th>Ulica i broj <ion-icon name="musical-note-outline" style="font-size: 20px; vertical-align: sub;"></ion-icon></th>
+                        <th>Broj telefona<ion-icon name="musical-note-outline" style="font-size: 20px; vertical-align: sub;"></ion-icon></th>                        
+                        </thead>
+                        <tbody>
+                            @foreach (var lok in @Model.Lokacije)
+                            {
+                                @if (lok != null)
+                                {
+                                <tr>
+                                    <td>@lok.Grad</td>
+                                    <td>@lok.UlicaBr</td>
+                                    <td>@lok.BrojTelefona</td>
+                                </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    }
+
+          
+        </form>
+    </div>
+</div>
