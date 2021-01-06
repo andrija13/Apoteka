@@ -50,10 +50,10 @@ namespace Apoteka.Pages
                "', Email:'" + Apoteka.Email + "', Direktor:'" + Apoteka.Direktor + "', BrojTelefona:'" + Apoteka.BrojTelefona + "'}) return n").ExecuteWithoutResultsAsync();
 
 
-            var apoteka = _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("n.Naziv = '" + Apoteka.Naziv + "' AND n.Direktor= '"+Apoteka.Direktor+ "'").Return(n => n.As<Node<string>>());
+            var apoteka = _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("n.Naziv = '" + Apoteka.Naziv + "' AND n.Direktor= '" + Apoteka.Direktor + "'").Return(n => n.As<Node<string>>());
             var rez = apoteka.Results.Single();
             string id = rez.Reference.Id.ToString();
-            
+            Apoteka.ApotekaID = id;
             await _context.GraphClient.Cypher.Match("(n:Apoteka { Naziv:'" + Apoteka.Naziv + "', Direktor:'" + Apoteka.Direktor + "'})").Set("n.ApotekaID = " + id).ExecuteWithoutResultsAsync();
 
             foreach (Lokacija lok in Lokacije)
@@ -78,7 +78,7 @@ namespace Apoteka.Pages
                                              .Create("(b)-[r:POSEDUJE]->(a) return type(r)").ExecuteWithoutResultsAsync();
 
 
-            return RedirectToPage();
+            return RedirectToPage("ProfilApoteke",new {id=Apoteka.ApotekaID});
         }
     }
 }

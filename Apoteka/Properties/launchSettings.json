@@ -10,7 +10,7 @@
   "profiles": {
     "Watch": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Users\\Andrija\\source\\repos\\Apoteka\\Apoteka\\",
+      "workingDirectory": "C:\\Users\\andri\\Desktop\\Apoteka\\Apoteka\\Apoteka",
       "executablePath": "dotnet.exe",
       "commandLineArgs": "watch run",
       "launchBrowser": true,

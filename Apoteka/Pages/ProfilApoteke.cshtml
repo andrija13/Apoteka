@@ -4,56 +4,168 @@
 }
 <div class="row">
     <div class="col-md-4">
-        <form method="get">
+        <form method="post">
             <h4>Profil apoteke</h4>
             <hr />
-
+            <button type="button" class="btn btn-primary" id="Izmenibtn">Izmeni apoteku</button>
+            <button type="submit" class="btn btn-primary" id="Uklonibtn" asp-page-handler="UkloniApoteku">Ukloni apoteku</button>
             <div class="form-group">
                 <label hidden asp-for="Apoteka.ApotekaID"></label>
                 <input hidden asp-for="Apoteka.ApotekaID" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Apoteka.Naziv">Naziv apoteke: </label>
-                <input asp-for="Apoteka.Naziv" class="form-control" disabled />
+                <input asp-for="Apoteka.Naziv" class="form-control izmena" disabled />
             </div>
             <div class="form-group">
                 <label asp-for="Apoteka.Email">Email: </label>
-                <input asp-for="Apoteka.Email" class="form-control" disabled />
+                <input asp-for="Apoteka.Email" class="form-control izmena" disabled />
             </div>
             <div class="form-group">
                 <label asp-for="Apoteka.Direktor">Direktor: </label>
-                <input asp-for="Apoteka.Direktor" class="form-control" disabled />
+                <input asp-for="Apoteka.Direktor" class="form-control izmena" disabled />
             </div>
             <div class="form-group">
                 <label asp-for="Apoteka.BrojTelefona">Broj telefona: </label>
-                <input asp-for="Apoteka.BrojTelefona" class="form-control" disabled />
+                <input asp-for="Apoteka.BrojTelefona" class="form-control izmena" disabled />
             </div>
-                
-                    @if (@Model.Lokacije.Count > 0)
-                    {
+
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Broj članova: </label>
+                <label for="exampleFormControlInput1" id="brClanova">@Model.Lokacije.Count </label>
+                <input id="broj" asp-for="@Model.Lokacije.Count" hidden />
+                <br />
+                <button onclick="dodajClana()" type="button" hidden class="btn btn-outline-dark sacuvaj" value="CREATE" id="btnNoOfRec" style="margin-top: 5px;">Dodaj člana</button>
+                <table>
+                    <thead style="color: #8c8c8c;">
+                    <th>Grad</th>
+                    <th>Ulica i broj</th>
+                    <th>Broj telefona</th>
+                    </thead>
+                    <tbody id="tbody">
+
+
+                        @for(var i =0;i<Model.Lokacije.Count;i++)
+                        {
+                            var a = i + 1;
+                        <tr>
+                            <td><input type="text" id="c_@a" class="form-control" asp-for="@Model.Lokacije[i].ID" hidden></td>
+                            <td><input type="text" id="@a" class="form-control" asp-for="@Model.Lokacije[i].Grad" disabled></td>
+                            <td><input type="text" id="a_@a" class="form-control" asp-for="@Model.Lokacije[i].UlicaBr" disabled></td>
+                            <td><input type="text" id="b_@a" class="form-control" asp-for="@Model.Lokacije[i].BrojTelefona" disabled></td>
+                            <td> <button type="submit" onclick="obrisi(@a,this)" asp-route-idlok="@Model.Lokacije[i].ID" asp-page-handler="UkloniLokaciju" class="btn btn-outline-dark" style="margin-top: 5px;"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+            @*    @if (@Model.Lokacije.Count > 0)
+                {
                     <table class="tabela" table table-dark>
                         <thead>
+                        <th></th>
                         <th>Grad <ion-icon name="people-outline" style="font-size: 20px; vertical-align: sub;"></ion-icon></th>
                         <th>Ulica i broj <ion-icon name="musical-note-outline" style="font-size: 20px; vertical-align: sub;"></ion-icon></th>
-                        <th>Broj telefona<ion-icon name="musical-note-outline" style="font-size: 20px; vertical-align: sub;"></ion-icon></th>                        
+                        <th>Broj telefona<ion-icon name="musical-note-outline" style="font-size: 20px; vertical-align: sub;"></ion-icon></th>
+                        <th><button type="button" id="dodaj" class="form-control sacuvaj" hidden></button></th>
                         </thead>
                         <tbody>
-                            @foreach (var lok in @Model.Lokacije)
+                            @for (var i = 0; i < @Model.Lokacije.Count; i++)
                             {
-                                @if (lok != null)
+                                @if (@Model.Lokacije[i] != null)
                                 {
-                                <tr>
-                                    <td>@lok.Grad</td>
-                                    <td>@lok.UlicaBr</td>
-                                    <td>@lok.BrojTelefona</td>
-                                </tr>
+                                    <tr>
+                                        <td><input asp-for="@Model.Lokacije[i].ID" class="form-control izmena" hidden /></td>
+                                        <td><input asp-for="@Model.Lokacije[i].Grad" class="form-control izmena" disabled /></td>
+                                        <td><input asp-for="@Model.Lokacije[i].UlicaBr" class="form-control izmena" disabled /></td>
+                                        <td><input asp-for="@Model.Lokacije[i].BrojTelefona" class="form-control izmena" disabled /></td>
+                                        <td><button asp-route-idlok="@Model.Lokacije[i].ID" asp-page-handler="UkloniLokaciju" class="form-control sacuvaj" hidden /></td>
+                                    </tr>
                                 }
                             }
                         </tbody>
                     </table>
-                    }
+                    <div id="ClanoviDiv">
+                    </div>
+                }
+            *@
 
-          
+            <button type="submit" class="btn btn-primary sacuvaj" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button>
         </form>
+
     </div>
 </div>
+
+<script src="~/temp/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#Izmenibtn").click(function () {
+            var r = document.getElementsByClassName("izmena");
+            for (var i = 0; i < r.length; i++) {
+                r[i].removeAttribute("disabled");
+            }
+            var sacuvaj = document.getElementsByClassName("sacuvaj");
+            for (var i = 0; i < sacuvaj.length; i++) {
+                sacuvaj[i].removeAttribute("hidden");
+            }
+        });
+    });
+
+    function dodajClana() {
+        var brLok = document.getElementById('brClanova').innerHTML;
+        brLok++;
+        document.getElementById('brClanova').innerHTML = brLok;
+
+        var broj = document.getElementById('broj');
+        broj.value = brLok;
+
+        var tbl = "";
+        tbl += "<tr>" +
+            "<td>" +
+            "<input type='text' id='" + brLok + "' class=" + " form-control" + " name='NoviGradovi' />" +
+            "</td>" +
+            "<td>" +
+            "<input type='text' id='a_" + brLok + "' class=" + " form-control" + " name='NoveAdrese'/>" +
+            "</td>" +
+            "<td>" +
+            "<input type='text' id='b_" + brLok + "' class=" + " form-control" + " name='NoviBrojevi'/>" +
+            "</td>" +
+            " <td>" +
+            " <button type='button' onclick='obrisi(" + brLok + ",this)' class='btn btn-outline-dark' style='margin-top: 5px;'><ion-icon name='trash-outline' style='vertical-align:-2px;'></ion-icon></button>" +
+            "</td>" +
+            "</tr>";
+
+        $('#tbody').append(tbl);
+
+    }
+
+    function obrisi(idLok, dugme) {
+        var brLok = document.getElementById('brClanova').innerHTML;
+        brLok--;
+        document.getElementById('brClanova').innerHTML = brLok;
+
+        var broj = document.getElementById('broj');
+        broj.value = brLok;
+
+
+        var grad = document.getElementById(idLok);
+        var adresa = document.getElementById("a_" + idLok);
+        var broj = document.getElementById("b_" + idLok);
+
+        grad.setAttribute('id', "obrisano");
+        adresa.setAttribute('id', "obrisan");
+        broj.setAttribute('id', "obrisani");
+
+        grad.hidden = true;
+
+        adresa.hidden = true;
+        broj.hidden = true;
+        dugme.hidden = true;
+    }
+</script>
+
