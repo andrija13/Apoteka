@@ -50,9 +50,6 @@ namespace Apoteka.Pages
                "', Email:'" + Apoteka.Email + "', Direktor:'" + Apoteka.Direktor + "', BrojTelefona:'" + Apoteka.BrojTelefona + "'}) return n").ExecuteWithoutResultsAsync();
 
 
-            await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:IdentityUser)").Where("a.Naziv ='" + Apoteka.Naziv + "' AND a.Direktor='" + Apoteka.Direktor + "' AND b.UserName= '" + korisnik.UserName+ "'")
-                    .Create("(b)-[r:POSEDUJE]->(a) return type(r)").ExecuteWithoutResultsAsync();
-
             var apoteka = _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("n.Naziv = '" + Apoteka.Naziv + "' AND n.Direktor= '"+Apoteka.Direktor+ "'").Return(n => n.As<Node<string>>());
             var rez = apoteka.Results.Single();
             string id = rez.Reference.Id.ToString();
@@ -72,11 +69,15 @@ namespace Apoteka.Pages
 
                     await _context.GraphClient.Cypher.Match("(n:Lokacija { Grad:'" + lok.Grad + "', UlicaBr:'" + lok.UlicaBr + "'})").Set("n.ID = " + idl).ExecuteWithoutResultsAsync();
 
-                    await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:Lokacija)").Where("a.Naziv ='" + Apoteka.Naziv + "' AND a.Direktor='" + Apoteka.Direktor + "' AND b.Grad ='" + lok.Grad + "' AND b.UlicaBr= '" + lok.UlicaBr + "'")
+                    await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:Lokacija)").Where("a.ApotekaID =" + id + " AND b.ID= " + idl)
                         .Create("(a)-[r:SE_NALAZI_U]->(b) return type(r)").ExecuteWithoutResultsAsync();
                 }
             }
-  
+
+            await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:IdentityUser)").Where("a.ApotekaID =" + id + " AND b.UserName= '" + korisnik.UserName + "'")
+                                             .Create("(b)-[r:POSEDUJE]->(a) return type(r)").ExecuteWithoutResultsAsync();
+
+
             return RedirectToPage();
         }
     }
