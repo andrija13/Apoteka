@@ -64,10 +64,10 @@ namespace Apoteka.Pages
                    "', BrojTelefona:'" + lok.BrojTelefona + "'}) return n").ExecuteWithoutResultsAsync();
 
                     var lokacija = _context.GraphClient.Cypher.Match("(n:Lokacija)").Where("n.Grad = '" + lok.Grad + "' AND n.UlicaBr= '" + lok.UlicaBr + "'").Return(n => n.As<Node<string>>());
-                    var r = apoteka.Results.Single();
-                    string idl = rez.Reference.Id.ToString();
+                    var r = lokacija.Results.Single();
+                    string idl = r.Reference.Id.ToString();
 
-                    await _context.GraphClient.Cypher.Match("(n:Lokacija { Grad:'" + lok.Grad + "', UlicaBr:'" + lok.UlicaBr + "'})").Set("n.ID = " + idl).ExecuteWithoutResultsAsync();
+                    await _context.GraphClient.Cypher.Match("(n:Lokacija)").Where("n.Grad = '" + lok.Grad + "' AND n.UlicaBr= '" + lok.UlicaBr + "'").Set("n.ID = " + idl).ExecuteWithoutResultsAsync();
 
                     await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:Lokacija)").Where("a.ApotekaID =" + id + " AND b.ID= " + idl)
                         .Create("(a)-[r:SE_NALAZI_U]->(b) return type(r)").ExecuteWithoutResultsAsync();
