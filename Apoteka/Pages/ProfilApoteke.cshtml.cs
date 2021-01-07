@@ -36,7 +36,7 @@ namespace Apoteka.Pages
         [BindProperty]
         public string Cena { get; set; }
         [BindProperty]
-        public IList<bool> Check_Grad { get; set; }
+        public IList<int> Check_Grad { get; set; }
 
         private readonly  AnnotationsContext _context;
         public ProfilApotekeModel(AnnotationsContext context)
@@ -49,8 +49,7 @@ namespace Apoteka.Pages
             IzabraniProizvodi = new List<Proizvod>();
             Proizvodi = new List<Proizvod>();
             SviProizvodi = new List<SelectListItem>();
-            Check_Grad = new List<bool>();
-
+            Check_Grad = new List<int>();
         }
         public async Task OnGetAsync(string id)
         {

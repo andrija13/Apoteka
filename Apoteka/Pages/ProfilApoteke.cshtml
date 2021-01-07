@@ -82,13 +82,10 @@
                                 </select>
                                @for (var i = 0; i < @Model.Lokacije.Count; i++)
                                {
-
-                                   var lok = @Model.Lokacije[i];
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" asp-for="@Model.Check_Grad" value="@lok.ID" id="@lok.ID"/>
-                                <label class="custom-control-label" for="klima">@Model.Lokacije[i].Grad+" "+@Model.Lokacije[i].UlicaBr</label>
-                            </div>
-                                    <label>Cena: </label><input asp-for="@Model.Cena" />   
+                                var lok = @Model.Lokacije[i];
+                                <input type="checkbox" name="@Model.Check_Grad" value="@lok.ID" id="@lok.ID"/>
+                                <label for="@lok.ID ">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
+                                <label>Cena: </label><input asp-for="@Model.Cena" />   
                                }
                             </div>
                         </div>
