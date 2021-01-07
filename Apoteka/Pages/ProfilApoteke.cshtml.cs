@@ -9,6 +9,7 @@ using Neo4jClient;
 using Neo4jClient.DataAnnotations;
 using Apoteka.Models;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Apoteka.Pages
 {
@@ -17,13 +18,25 @@ namespace Apoteka.Pages
         [BindProperty]
         public ApotekaModel Apoteka { get; set; }
         [BindProperty]
+        public string IzabraniProizvod { get; set; }
+        [BindProperty]
         public IList<Lokacija> Lokacije{ get; set; }
         [BindProperty]
         public IList<string> NoviGradovi { get; set; }
         [BindProperty]
         public IList<string> NoveAdrese { get; set; }
         [BindProperty]
+        public IList<Proizvod> IzabraniProizvodi { get; set; }
+        [BindProperty]
+        public IList<Proizvod> Proizvodi { get; set; }
+        [BindProperty]
         public IList<string> NoviBrojevi { get; set; }
+        [BindProperty]
+        public List<SelectListItem> SviProizvodi{ get; set; }
+        [BindProperty]
+        public string Cena { get; set; }
+        [BindProperty]
+        public IList<bool> Check_Grad { get; set; }
 
         private readonly  AnnotationsContext _context;
         public ProfilApotekeModel(AnnotationsContext context)
@@ -33,6 +46,11 @@ namespace Apoteka.Pages
             NoviGradovi = new List<string>();
             NoveAdrese = new List<string>();
             NoviBrojevi = new List<string>();
+            IzabraniProizvodi = new List<Proizvod>();
+            Proizvodi = new List<Proizvod>();
+            SviProizvodi = new List<SelectListItem>();
+            Check_Grad = new List<bool>();
+
         }
         public async Task OnGetAsync(string id)
         {
@@ -49,6 +67,18 @@ namespace Apoteka.Pages
             var rezultat = lokacija.Results;
 
             Lokacije =rezultat.Select(node => JsonConvert.DeserializeObject<Lokacija>(node.Data)).ToList();
+
+            var proizvod= _context.GraphClient.Cypher.Match("(p:Proizvod)").Return(p => p.As<Node<string>>());
+            var rezul = proizvod.Results;
+            Proizvodi = rezul.Select(node => JsonConvert.DeserializeObject<Proizvod>(node.Data)).ToList();
+            
+            foreach(Proizvod pro in Proizvodi)
+            {
+                SelectListItem p=new SelectListItem();
+                p.Text = pro.Naziv+" "+pro.Opis;
+                p.Value = pro.ID;
+                SviProizvodi.Add(p);
+            }    
 
 
         }

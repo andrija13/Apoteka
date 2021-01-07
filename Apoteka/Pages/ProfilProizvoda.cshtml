@@ -1,4 +1,70 @@
 ﻿@page
 @model Apoteka.Pages.ProfilProizvodaModel
 @{
+    var photoPath = "~/images/" + (Model.Proizvod.Slika ?? "Logo.png");
 }
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <h4>@Model.Proizvod.Naziv</h4>
+            <h6>@Model.Proizvod.Kategorija"</h6>
+            <hr />
+            <button type="button" class="btn btn-primary" id="Izmenibtn">Izmeni apoteku</button>
+            <button type="submit" class="btn btn-primary" id="Uklonibtn" asp-page-handler="UkloniApoteku">Ukloni apoteku</button>
+            <div class="form-group">
+                <label hidden asp-for="@Model.Proizvod.ID"></label>
+                <input hidden asp-for="@Model.Proizvod.ID" class="form-control" />
+            </div>
+            <div class="text-center">
+                <img src="@photoPath" class="avatar img-circle" alt="avatar" asp-append-version="true" style="border-radius: 5%; width: 260px; height:260px; padding-bottom:10px">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Proizvod.Opis">Opis: </label>
+                <input type="text" asp-for="@Model.Proizvod.Opis" class="form-control izmena" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Proizvod.Proizvodjac">Proizvodjac: </label>
+                <input asp-for="@Model.Proizvod.Proizvodjac" class="form-control izmena" disabled />
+            </div>
+            @if (Model.Lokacije.Count != null)
+            {
+
+                <div class="form-group">
+                    <table>
+                        <thead style="color: #8c8c8c;">
+                        <th>Naziv apoteke</th>
+                        <th>Grad</th>
+                        <th>Ulica i broj</th>
+                        <th>Broj telefona</th>
+                        <th>Cena</th>
+                        </thead>
+                        <tbody id="tbody">
+
+                            @for (var i = 0; i < @Model.Apoteke.Count; i++)
+                            {
+                                @for (var j = 0; j < Model.Lokacije.Count; j++)
+                                {
+                                    var a = i + 1;
+                                    string cena;
+                                    @Model.Cene.TryGetValue(Model.Lokacije[j], out cena);
+                                    <tr>
+                                        <td><input type="text" id="c_@a" class="form-control" asp-for="@Model.Apoteke[i].Naziv" hidden></td>
+                                        <td><input type="text" id="@a" class="form-control" asp-for="@Model.Lokacije[j].Grad" disabled></td>
+                                        <td><input type="text" id="a_@a" class="form-control" asp-for="@Model.Lokacije[j].UlicaBr" disabled></td>
+                                        <td><input type="text" id="b_@a" class="form-control" asp-for="@Model.Lokacije[j].BrojTelefona" disabled></td>
+                                        <td><input type="text" id="d_@a" class="form-control" asp-for="@cena" disabled></td>
+                                    </tr>
+                                }
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+        </form>
+
+    </div>
+</div>
