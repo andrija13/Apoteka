@@ -122,7 +122,6 @@
                                <td><input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[i].ProizvodVeza.Naziv" disabled></td>
                                <td><input type="text" id="b_@a" class="form-control"  asp-for="@Model.Imas[i].ProizvodVeza.Kategorija" disabled></td>
                                 <td><input type="text" id="c_@a" class="form-control"  asp-for="@Model.Imas[i].ProizvodVeza.Proizvodjac" disabled></td>
-                               <td><input type="text" id="d_@a" class="form-control"  asp-for="@Model.Imas[i].ProizvodVeza.Proizvodjac" disabled></td>
                                 <td><input type="text" id="e_@a" class="form-control" asp-for="@Model.Imas[i].Cena" disabled></td>
                                 <td><input type="text" id="f_@a" class="form-control"  asp-for="@Model.Imas[i].LokacijaVeza.UlicaBr" disabled></td>
 
@@ -130,10 +129,6 @@
                                 <td> <button type="submit"  id="g_@a" asp-route-idVeza="@Model.Imas[i].VezaID" asp-page-handler="UkloniVezu" class="btn btn-outline-dark" style="margin-top: 5px;"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
                             </tr>
                         }
-                       
-
-
-
                     </tbody>
                 </table>
             </div>

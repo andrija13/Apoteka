@@ -38,15 +38,9 @@ namespace Apoteka.Pages
         [BindProperty]
         public IList<string> Cene { get; set; }
         [BindProperty]
-        public Dictionary<Proizvod,string> MojeCene { get; set; }
-        [BindProperty]
         public IList<Lokacija> MojeLokacije { get; set; }
-        [BindProperty]
 
-        public IList<bool> Check_Grad { get; set; }
-        [BindProperty]
 
-        public IList<string> LokacijaID{ get; set; }
         private readonly AnnotationsContext _context;
         public ProfilApotekeModel(AnnotationsContext context)
         {
@@ -57,23 +51,16 @@ namespace Apoteka.Pages
             NoviBrojevi = new List<string>();
             Proizvodi = new List<Proizvod>();
             SviProizvodi = new List<SelectListItem>();
-            Check_Grad = new List<bool>();
             Cene = new List<string>();
             MojeLokacije = new List<Lokacija>();
-            MojeCene = new Dictionary<Proizvod, string>();
-            LokacijaID = new List<string>();
             Imas = new List<Ima>();
         }
-        public async Task OnGetAsync(string id)
+        public void OnGet(string id)
         {
             var apoteka = _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("n.ApotekaID= " + id).Return(n => n.As<Node<string>>());
             var rez = apoteka.Results.Single();
 
-            ////List<ApotekaModel> ap = rez.Select(node => JsonConvert.DeserializeObject<ApotekaModel>(node.Data)).ToList();
             Apoteka = JsonConvert.DeserializeObject<ApotekaModel>(rez.Data);
-
-            //            MATCH(n: Apoteka { ApotekaID: 1})-[:SE_NALAZI_U]->(l: Lokacija)
-            //RETURN l;
 
             var lokacija = _context.GraphClient.Cypher.Match("(n:Apoteka {ApotekaID:" + id + "})-[:SE_NALAZI_U]->(l: Lokacija)").Return(l => l.As<Node<string>>());
             var rezultat = lokacija.Results;
@@ -92,11 +79,11 @@ namespace Apoteka.Pages
                 SviProizvodi.Add(p);
             }
 
-            
             foreach (Lokacija l in Lokacije)
             {
-                    MojeLokacije.Add(l);
+                MojeLokacije.Add(l);
             }
+
             int brojac = 0;
             foreach (Lokacija ml in MojeLokacije)
             {
@@ -111,19 +98,15 @@ namespace Apoteka.Pages
                     i.LokacijaVeza = ml;
                     var cenequery = _context.GraphClient.Cypher.Match("(p:Proizvod { ID:" + p.ID + "})<-[r:IMA]-(l:Lokacija {ID :" + ml.ID + "})").Return(r => r.As<Node<string>>());
                     var c = cenequery.Results.Single();
+                    string idv = c.Reference.Id.ToString();
                     string cena = JObject.Parse(c.Data)["Cena"].ToString();
-                    MojeCene.Add(p, cena);
                     i.ProizvodVeza = p;
                     i.Cena = cena;
-                    i.VezaID = brojac.ToString();
+                    i.VezaID = idv;
                     Imas.Add(i);
                     brojac++;
                 }
-                ///MATCH (p:ProizvodVeza { ID: 187 })<-[r:IMA]-(l:Lokacija {ID: 43})
-                //RETURN r.Cena
             }
-
-
         }
         public async Task<IActionResult> OnPostSacuvajApotekuAsync()
         {
@@ -184,7 +167,6 @@ namespace Apoteka.Pages
         }
         public async Task<IActionResult> OnPostDodajProizvodAsync()
         {
-
             foreach (Lokacija l in Lokacije)
             {
                 if (l.Sel == true)
@@ -196,10 +178,16 @@ namespace Apoteka.Pages
             {
                 var lokacija = _context.GraphClient.Cypher.Match("(l:Lokacija {ID:" + ml.ID + "})-[:IMA]->(p:Proizvod{ID:" + IzabraniProizvod + "})").Return(p => p.As<Node<string>>());
                 var provera = lokacija.Results;
-                if (provera.Count()== 0)
+                if (provera.Count() == 0)
                 {
                     await _context.GraphClient.Cypher.Match("(p:Proizvod),(l:Lokacija)").Where("p.ID=" + IzabraniProizvod + " AND l.ID=" + ml.ID)
                                         .Create("(l)-[r:IMA {Cena:'" + Cene[br] + "'}]->(p)").ExecuteWithoutResultsAsync();
+
+                    var veza = _context.GraphClient.Cypher.Match("(p:Proizvod{ID:" + IzabraniProizvod + "})<-[r:IMA]-(l:Lokacija{ID:" + ml.ID + "})").Return(r => r.As<Node<string>>());
+                    var r = veza.Results.Single();
+                    string idv = r.Reference.Id.ToString();
+
+                    await _context.GraphClient.Cypher.Match("(p:Proizvod{ID:" + IzabraniProizvod + "})<-[r:IMA]-(l:Lokacija{ID:" + ml.ID + "})").Set("r.ID = " + idv).ExecuteWithoutResultsAsync();
 
                     br++;
                 }
@@ -211,13 +199,7 @@ namespace Apoteka.Pages
         }
         public async Task<IActionResult> OnPostUkloniVezuAsync(string idVeza)
         {
-            Ima ima = new Ima();
-            foreach (Ima i in Imas)
-            {
-                if (i.VezaID == idVeza)
-                    ima = i;
-            }
-            await _context.GraphClient.Cypher.Match("(p:Proizvod{ID:" + ima.ProizvodVeza.ID + "})<-[r:IMA]-(l:Lokacija{ID:" + ima.LokacijaVeza.ID + "})").Delete("r").ExecuteWithoutResultsAsync();
+            await _context.GraphClient.Cypher.Match("(p:Proizvod)<-[r:IMA {ID:"+idVeza+"}]-(l:Lokacija)").Delete("r").ExecuteWithoutResultsAsync();
 
             return RedirectToPage("ProfilApoteke", new { id = Apoteka.ApotekaID });
         }

@@ -60,16 +60,16 @@ namespace Apoteka.Pages
             {
                 if (lok != null)
                 {
-                    await _context.GraphClient.Cypher.Create("(n:LokacijaVeza { VezaID:'" + lok.ID + "', Grad:'" + lok.Grad + "', UlicaBr:'" + lok.UlicaBr +
+                    await _context.GraphClient.Cypher.Create("(n:Lokacija { ID:'" + lok.ID + "', Grad:'" + lok.Grad + "', UlicaBr:'" + lok.UlicaBr +
                    "', BrojTelefona:'" + lok.BrojTelefona + "'}) return n").ExecuteWithoutResultsAsync();
 
-                    var lokacija = _context.GraphClient.Cypher.Match("(n:LokacijaVeza)").Where("n.Grad = '" + lok.Grad + "' AND n.UlicaBr= '" + lok.UlicaBr + "'").Return(n => n.As<Node<string>>());
+                    var lokacija = _context.GraphClient.Cypher.Match("(n:Lokacija)").Where("n.Grad = '" + lok.Grad + "' AND n.UlicaBr= '" + lok.UlicaBr + "'").Return(n => n.As<Node<string>>());
                     var r = lokacija.Results.Single();
                     string idl = r.Reference.Id.ToString();
 
-                    await _context.GraphClient.Cypher.Match("(n:LokacijaVeza)").Where("n.Grad = '" + lok.Grad + "' AND n.UlicaBr= '" + lok.UlicaBr + "'").Set("n.VezaID = " + idl).ExecuteWithoutResultsAsync();
+                    await _context.GraphClient.Cypher.Match("(n:Lokacija)").Where("n.Grad = '" + lok.Grad + "' AND n.UlicaBr= '" + lok.UlicaBr + "'").Set("n.ID = " + idl).ExecuteWithoutResultsAsync();
 
-                    await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:LokacijaVeza)").Where("a.ApotekaID =" + id + " AND b.VezaID= " + idl)
+                    await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:Lokacija)").Where("a.ApotekaID =" + id + " AND b.ID= " + idl)
                         .Create("(a)-[r:SE_NALAZI_U]->(b) return type(r)").ExecuteWithoutResultsAsync();
                 }
             }
