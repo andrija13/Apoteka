@@ -51,10 +51,10 @@
                         {
                             var a = i + 1;
                             <tr>
-                                <td><input type="text" id="c_@a" class="form-control" asp-for="@Model.Lokacije[i].ID" hidden></td>
-                                <td><input type="text" id="@a" class="form-control" asp-for="@Model.Lokacije[i].Grad" disabled></td>
-                                <td><input type="text" id="a_@a" class="form-control" asp-for="@Model.Lokacije[i].UlicaBr" disabled></td>
-                                <td><input type="text" id="b_@a" class="form-control" asp-for="@Model.Lokacije[i].BrojTelefona" disabled></td>
+                                <td><input type="text" id="aa_@a" class="form-control" asp-for="@Model.Lokacije[i].ID" hidden></td>
+                                <td><input type="text" id="bb_@a" class="form-control" asp-for="@Model.Lokacije[i].Grad" disabled></td>
+                                <td><input type="text" id="cc_@a" class="form-control" asp-for="@Model.Lokacije[i].UlicaBr" disabled></td>
+                                <td><input type="text" id="dd_@a" class="form-control" asp-for="@Model.Lokacije[i].BrojTelefona" disabled></td>
                                 <td> <button type="submit" onclick="obrisi(@a,this)" asp-route-idlok="@Model.Lokacije[i].ID" asp-page-handler="UkloniLokaciju" class="btn btn-outline-dark" style="margin-top: 5px;"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
                             </tr>
                         }
@@ -62,7 +62,6 @@
                     </tbody>
                 </table>
             </div>
-
             <!-- Modal box za dodavanje zauzetih termina -->
             <div class="modal fade" id="dodajProizvod" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -76,22 +75,27 @@
                         <div class="modal-body">
                             <div class="form-group">
 
-                                  <label for="TipProslaveT">Izaberite proizvod: </label>
-                                <select class="form-control zahtev" asp-for="@Model.IzabraniProizvod" asp-items="@Model.SviProizvodi" id="TipProslaveT" required>
+                                <label for="TipProslaveT">Izaberite proizvod: </label>
+                                <select class="form-control zahtev" asp-for="@Model.IzabraniProizvod" asp-items="@Model.SviProizvodi" id="TipProslaveT" >
                                     <option value="" selected disabled hidden>Izaberite proizvod:</option>
                                 </select>
-                               @for (var i = 0; i < @Model.Lokacije.Count; i++)
-                               {
-                                var lok = @Model.Lokacije[i];
-                                <input type="checkbox" name="@Model.Check_Grad" value="@lok.ID" id="@lok.ID"/>
-                                <label for="@lok.ID ">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
-                                <label>Cena: </label><input asp-for="@Model.Cena" />   
-                               }
+                                @for (var i = 0; i < @Model.Lokacije.Count; i++)
+                                {
+                                    var r = "Lokacije_" + i + "__Sel";
+                                    <div>
+                                        <td class="js-export-checkbox">
+                                            @Html.CheckBoxFor(m => m.Lokacije[i].Sel)
+                                        </td>
+                                        <label for="@r">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
+                                        <br />
+                                        <label> Cena: </label> <input class="form-control" type="number" id="@i" asp-for="@Model.Cene" />
+                                    </div>
+                                }
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" onclick="otkazi()" class="btn btn-secondary" data-dismiss="modal">Poništi</button>
-                      @*      <button type="submit" onclick="promeni()" id="terminbtn" class="btn btn-primary" asp-route-Id="@Model.Oglas.Id" asp-page-handler="DodajTermin">Dodaj termin</button>*@
+                            <button type="submit" asp-page-handler="DodajProizvod" class="btn btn-primary">Potvrdi</button>
                         </div>
                     </div>
                 </div>
@@ -99,7 +103,43 @@
 
 
 
-            <button type="submit" class="btn btn-primary sacuvaj" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button>
+           
+            <div class="form-group">
+                <table>
+                    <thead style="color: #8c8c8c;">
+                    <th>Naziv leka</th>
+                    <th>Kategorija</th>
+                    <th>Proizvodjac</th>
+                    <th>Cena</th>
+                    <th>Lokacija</th>
+                    <th>Kontakt</th>
+                    </thead>
+                    <tbody id="tbody">
+                        @for(var i =0;i<Model.Imas.Count;i++)
+                        {
+                            var a = i + 1;
+                            <tr>
+                               <td><input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[i].ProizvodVeza.Naziv" disabled></td>
+                               <td><input type="text" id="b_@a" class="form-control"  asp-for="@Model.Imas[i].ProizvodVeza.Kategorija" disabled></td>
+                                <td><input type="text" id="c_@a" class="form-control"  asp-for="@Model.Imas[i].ProizvodVeza.Proizvodjac" disabled></td>
+                               <td><input type="text" id="d_@a" class="form-control"  asp-for="@Model.Imas[i].ProizvodVeza.Proizvodjac" disabled></td>
+                                <td><input type="text" id="e_@a" class="form-control" asp-for="@Model.Imas[i].Cena" disabled></td>
+                                <td><input type="text" id="f_@a" class="form-control"  asp-for="@Model.Imas[i].LokacijaVeza.UlicaBr" disabled></td>
+
+                                <td><input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[i].VezaID"  hidden></td>
+                                <td> <button type="submit"  id="g_@a" asp-route-idVeza="@Model.Imas[i].VezaID" asp-page-handler="UkloniVezu" class="btn btn-outline-dark" style="margin-top: 5px;"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
+                            </tr>
+                        }
+                       
+
+
+
+                    </tbody>
+                </table>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary sacuvaj" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button> 
         </form>
 
     </div>
@@ -109,7 +149,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-
+        
         $("#Izmenibtn").click(function () {
             var r = document.getElementsByClassName("izmena");
             for (var i = 0; i < r.length; i++) {

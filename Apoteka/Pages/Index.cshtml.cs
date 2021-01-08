@@ -31,21 +31,21 @@ namespace Apoteka.Pages
 
         public async Task OnGetAsync()
         {
-            var proizvod = _context.GraphClient.Cypher.Match("(p:Proizvod)").Return(p => p.As<Node<string>>());
+            var proizvod = _context.GraphClient.Cypher.Match("(p:ProizvodVeza)").Return(p => p.As<Node<string>>());
             var rezul = proizvod.Results;
             Proizvodi = rezul.Select(node => JsonConvert.DeserializeObject<Proizvod>(node.Data)).ToList();
 
             if (Proizvodi.Count==0)
             {
-                _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'IBUPROFEN',Kategorija:'IBUPROFEN', Opis:'film tabl. 30x600mg',Proizvodjac:'Hemofarm',Slika:'ibuprofen-400-mg-67.png'})").ExecuteWithoutResults();
-                _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'BRUFEN',Kategorija:'IBUPROFEN', Opis:'film tabl. 30x400mg',Proizvodjac:'Hemofarm',Slika:'brufen1.jpg'})").ExecuteWithoutResults();
-                _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'IBUPROFEN',Kategorija:'IBUPROFEN', Opis:'film tabl. 30x200mg',Proizvodjac:'Hemofarm',Slika:'ibuprofen-400-mg-67.png'})").ExecuteWithoutResults();
-                _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'DEFRINOL FORTE',Kategorija:'PSEUDOFEDRIN', Opis:'film tabl. 20x(200mg+30mg)',Proizvodjac:'Galenika',Slika:'defrinol-forte.jpg'})").ExecuteWithoutResults();
-                _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'RINASEK',Kategorija:'PSEUDOFEDRIN', Opis:'sirup 100ml (100mg+30mg)/5ml',Proizvodjac:'Hemofarm',Slika:'unnamed.jpg'})").ExecuteWithoutResults();
-                _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'OPERIL',Kategorija:'KAPI ZA NOS', Opis:'kapi 0.05% 10ml',Proizvodjac:'Lek',Slika:'operil-kapi-za-nos-za-odrasle-10ml-640x640.jpg'})").ExecuteWithoutResults();
-                _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'MARISOL',Kategorija:'KAPI ZA NOS', Opis:'kapi 2.2% 50ml',Proizvodjac:'Esensa',Slika:'marisol-imuno-600x600.jpg'})").ExecuteWithoutResults();
-                _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'JSP FFP2 325 TYPHOON ',Kategorija:'ZASTITNE MASKE', Opis:'FFP2 325 TYPHOON ',Proizvodjac:'JSP',Slika:'maska-disajni-organi-zastita-disanje-jsp-typhoon-zdj-325.jpg'})").ExecuteWithoutResults();
-                proizvod = _context.GraphClient.Cypher.Match("(p:Proizvod)").Return(p => p.As<Node<string>>());
+                _context.GraphClient.Cypher.Create("(n:ProizvodVeza {VezaID:'' ,Naziv:'IBUPROFEN',Kategorija:'IBUPROFEN', Opis:'film tabl. 30x600mg',Proizvodjac:'Hemofarm',Slika:'ibuprofen-400-mg-67.png'})").ExecuteWithoutResults();
+                _context.GraphClient.Cypher.Create("(n:ProizvodVeza {VezaID:'' ,Naziv:'BRUFEN',Kategorija:'IBUPROFEN', Opis:'film tabl. 30x400mg',Proizvodjac:'Hemofarm',Slika:'brufen1.jpg'})").ExecuteWithoutResults();
+                _context.GraphClient.Cypher.Create("(n:ProizvodVeza {VezaID:'' ,Naziv:'IBUPROFEN',Kategorija:'IBUPROFEN', Opis:'film tabl. 30x200mg',Proizvodjac:'Hemofarm',Slika:'ibuprofen-400-mg-67.png'})").ExecuteWithoutResults();
+                _context.GraphClient.Cypher.Create("(n:ProizvodVeza {VezaID:'' ,Naziv:'DEFRINOL FORTE',Kategorija:'PSEUDOFEDRIN', Opis:'film tabl. 20x(200mg+30mg)',Proizvodjac:'Galenika',Slika:'defrinol-forte.jpg'})").ExecuteWithoutResults();
+                _context.GraphClient.Cypher.Create("(n:ProizvodVeza {VezaID:'' ,Naziv:'RINASEK',Kategorija:'PSEUDOFEDRIN', Opis:'sirup 100ml (100mg+30mg)/5ml',Proizvodjac:'Hemofarm',Slika:'unnamed.jpg'})").ExecuteWithoutResults();
+                _context.GraphClient.Cypher.Create("(n:ProizvodVeza {VezaID:'' ,Naziv:'OPERIL',Kategorija:'KAPI ZA NOS', Opis:'kapi 0.05% 10ml',Proizvodjac:'Lek',Slika:'operil-kapi-za-nos-za-odrasle-10ml-640x640.jpg'})").ExecuteWithoutResults();
+                _context.GraphClient.Cypher.Create("(n:ProizvodVeza {VezaID:'' ,Naziv:'MARISOL',Kategorija:'KAPI ZA NOS', Opis:'kapi 2.2% 50ml',Proizvodjac:'Esensa',Slika:'marisol-imuno-600x600.jpg'})").ExecuteWithoutResults();
+                _context.GraphClient.Cypher.Create("(n:ProizvodVeza {VezaID:'' ,Naziv:'JSP FFP2 325 TYPHOON ',Kategorija:'ZASTITNE MASKE', Opis:'FFP2 325 TYPHOON ',Proizvodjac:'JSP',Slika:'maska-disajni-organi-zastita-disanje-jsp-typhoon-zdj-325.jpg'})").ExecuteWithoutResults();
+                proizvod = _context.GraphClient.Cypher.Match("(p:ProizvodVeza)").Return(p => p.As<Node<string>>());
                 rezul = proizvod.Results;
                 Proizvodi = rezul.Select(node => JsonConvert.DeserializeObject<Proizvod>(node.Data)).ToList();
             }
@@ -56,7 +56,7 @@ namespace Apoteka.Pages
             for (int i=0;i<Proizvodi.Count;i++)
             {
                 Proizvodi[i].ID = Ids[i];
-                await _context.GraphClient.Cypher.Match("(n:Proizvod { Naziv:'" + Proizvodi[i].Naziv + "', Proizvodjac:'" + Proizvodi[i].Proizvodjac + "',Opis:'"+Proizvodi[i].Opis+"' })").Set("n.ID = " + Ids[i]).ExecuteWithoutResultsAsync();
+                await _context.GraphClient.Cypher.Match("(n:ProizvodVeza { Naziv:'" + Proizvodi[i].Naziv + "', Proizvodjac:'" + Proizvodi[i].Proizvodjac + "',Opis:'"+Proizvodi[i].Opis+"' })").Set("n.VezaID = " + Ids[i]).ExecuteWithoutResultsAsync();
 
             }
 

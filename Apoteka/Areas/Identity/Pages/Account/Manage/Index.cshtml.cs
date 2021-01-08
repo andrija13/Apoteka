@@ -85,7 +85,7 @@ namespace Apoteka.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load user with VezaID '{_userManager.GetUserId(User)}'.");
             }
             await LoadAsync(user);
             return Page();
@@ -96,7 +96,7 @@ namespace Apoteka.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load user with VezaID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -112,7 +112,7 @@ namespace Apoteka.Areas.Identity.Pages.Account.Manage
                 if (!setPhoneResult.Succeeded)
                 {
                     var userId = await _userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with VezaID '{userId}'.");
                 }
             }
             var email = await _userManager.GetEmailAsync(user);
@@ -122,7 +122,7 @@ namespace Apoteka.Areas.Identity.Pages.Account.Manage
                 if (!setEmailResult.Succeeded)
                 {
                     var userId = await _userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with VezaID '{userId}'.");
                 }
             }
             if (Input.Ime != user.Ime)

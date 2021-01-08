@@ -11,5 +11,6 @@ namespace Apoteka.Models
         public string Grad { get; set; }
         public string UlicaBr { get; set; }
         public string BrojTelefona { get; set; }
+        public bool Sel { get; set; }
     }
 }
