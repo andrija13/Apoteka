@@ -9,11 +9,11 @@ namespace Apoteka.Models
 {
     public class ApotekaModel
     {
-        [Key]
         public string ApotekaID { get; set; }
         public string Naziv { get; set; }
         public string Email { get; set; }
         public string Direktor { get; set; }
         public string BrojTelefona { get; set; }
+        public string Slika { get; set; }
     }
 }

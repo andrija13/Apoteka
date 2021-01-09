@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using Neo4jClient.DataAnnotations;
 using Neo4jClient;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace Apoteka.Pages
 {
@@ -19,26 +22,22 @@ namespace Apoteka.Pages
         public ApotekaModel Apoteka { get; set; }
         [BindProperty]
         public IList<Lokacija> Lokacije { get; set; }
-        public Korisnik Korisnik { get; set; }
+        [BindProperty]
+        public IFormFile Photo { get; set; }
+
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<Korisnik> _userManager;
         private readonly AnnotationsContext _context;
 
-        public DodajApotekuModel(UserManager<Korisnik> userManager, AnnotationsContext context)
+        public DodajApotekuModel(UserManager<Korisnik> userManager, AnnotationsContext context, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
             Lokacije = new List<Lokacija>();
         }
         public void OnGet()
         {
-
-            //var apoteka = _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("(n.Naziv = '" + naziv + "')").Return(n => n.As<Node<string>>());
-            //var rez = apoteka.Results.Single();
-
-            ////List<ApotekaModel> ap = rez.Select(node => JsonConvert.DeserializeObject<ApotekaModel>(node.Data)).ToList();
-            //ApotekaModel ap = JsonConvert.DeserializeObject<ApotekaModel>(rez.Data);
-            //string id = rez.Reference.Id.ToString();
-
         }
 
         public async Task<IActionResult> OnPostDodajAsync()
@@ -46,9 +45,18 @@ namespace Apoteka.Pages
 
             var korisnik = await _userManager.GetUserAsync(User);
 
-            await _context.GraphClient.Cypher.Create("(n:Apoteka { ApotekaID:'" + Apoteka.ApotekaID + "', Naziv:'" + Apoteka.Naziv +
-               "', Email:'" + Apoteka.Email + "', Direktor:'" + Apoteka.Direktor + "', BrojTelefona:'" + Apoteka.BrojTelefona + "'}) return n").ExecuteWithoutResultsAsync();
+            if (Photo != null)
+            {
+                if (Apoteka.Slika != null)
+                {
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "imagesApoteke", Apoteka.Slika);
+                    System.IO.File.Delete(filePath);
+                }
+                Apoteka.Slika = ProcessUploadedFile();
+            }
 
+            await _context.GraphClient.Cypher.Create("(n:Apoteka { ApotekaID:'" + Apoteka.ApotekaID + "', Naziv:'" + Apoteka.Naziv +
+               "', Email:'" + Apoteka.Email + "', Direktor:'" + Apoteka.Direktor + "', BrojTelefona:'" + Apoteka.BrojTelefona + "', Slika:'"+Apoteka.Slika+"'})").ExecuteWithoutResultsAsync();
 
             var apoteka = _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("n.Naziv = '" + Apoteka.Naziv + "' AND n.Direktor= '" + Apoteka.Direktor + "'").Return(n => n.As<Node<string>>());
             var rez = apoteka.Results.Single();
@@ -77,8 +85,22 @@ namespace Apoteka.Pages
             await _context.GraphClient.Cypher.Match("(a:Apoteka),(b:IdentityUser)").Where("a.ApotekaID =" + id + " AND b.UserName= '" + korisnik.UserName + "'")
                                              .Create("(b)-[r:POSEDUJE]->(a) return type(r)").ExecuteWithoutResultsAsync();
 
-
             return RedirectToPage("ProfilApoteke",new {id=Apoteka.ApotekaID});
+        }
+        public string ProcessUploadedFile()
+        {
+            string uniqueFileName = null;
+            if (Photo != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "imagesApoteke");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    Photo.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
     }
 }

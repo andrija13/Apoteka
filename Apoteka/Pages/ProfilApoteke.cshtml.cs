@@ -10,13 +10,16 @@ using Neo4jClient.DataAnnotations;
 using Apoteka.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using NugetJObject;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace Apoteka.Pages
 {
     public class ProfilApotekeModel : PageModel
     {
+
         [BindProperty]
         public ApotekaModel Apoteka { get; set; }
         [BindProperty]
@@ -40,11 +43,15 @@ namespace Apoteka.Pages
         [BindProperty]
         public IList<Lokacija> MojeLokacije { get; set; }
 
+        [BindProperty]
+        public IFormFile Photo { get; set; }
 
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly AnnotationsContext _context;
-        public ProfilApotekeModel(AnnotationsContext context)
+        public ProfilApotekeModel(AnnotationsContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
             Lokacije = new List<Lokacija>();
             NoviGradovi = new List<string>();
             NoveAdrese = new List<string>();
@@ -110,12 +117,18 @@ namespace Apoteka.Pages
         }
         public async Task<IActionResult> OnPostSacuvajApotekuAsync()
         {
-            await _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("n.ApotekaID = " + Apoteka.ApotekaID).Set("n = { ApotekaID:" + Apoteka.ApotekaID + ", Naziv: '" + Apoteka.Naziv + "', Email:'" + Apoteka.Email + "', Direktor: '" + Apoteka.Direktor + "', BrojTelefona: '" + Apoteka.BrojTelefona + "'}").ExecuteWithoutResultsAsync();
-            //for(int i = 0; i < Lokacije.Count; i++)
-            //{
-            //    Lokacija lok = Lokacije[i];
-            //    await _context.GraphClient.Cypher.Match("(l:Lokacija)").Where("l.ID=" + lok.ID).Set("l = { ID:"+lok.ID+", Grad:'" + lok.Grad + "', UlicaBr:'" + lok.UlicaBr + "', BrojTelefona:'" + lok.BrojTelefona+"'}").ExecuteWithoutResultsAsync();
-            //}
+            if (Photo != null)
+            {
+                if (Apoteka.Slika != null)
+                {
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "imagesApoteke", Apoteka.Slika);
+                    System.IO.File.Delete(filePath);
+                }
+                Apoteka.Slika = ProcessUploadedFile();
+            }
+
+            await _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("n.ApotekaID = " + Apoteka.ApotekaID).Set("n = { ApotekaID:" + Apoteka.ApotekaID + ", Naziv: '" + Apoteka.Naziv + "', Email:'" + Apoteka.Email + "', Direktor: '" + Apoteka.Direktor + "', BrojTelefona: '" + Apoteka.BrojTelefona + "', Slika: '"+ Apoteka.Slika +"'}").ExecuteWithoutResultsAsync();
+
             if (NoviGradovi.Count > 0)
             {
                 for (var clan = 0; clan < NoviGradovi.Count; clan++)
@@ -213,6 +226,21 @@ namespace Apoteka.Pages
             await _context.GraphClient.Cypher.Match("(p:Proizvod)<-[r:IMA {ID:"+idVeza+"}]-(l:Lokacija)").Delete("r").ExecuteWithoutResultsAsync();
 
             return RedirectToPage("ProfilApoteke", new { id = Apoteka.ApotekaID });
+        }
+        public string ProcessUploadedFile()
+        {
+            string uniqueFileName = null;
+            if (Photo != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "imagesApoteke");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    Photo.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
     }
 }

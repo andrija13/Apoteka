@@ -3,6 +3,7 @@
 @{
     var photoPath = "~/images/" + (Model.Proizvod.Slika ?? "Logo.png");
 }
+<link href="~/css/ProfilApoteke.css" rel="stylesheet" />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
@@ -25,41 +26,47 @@
                 <label asp-for="@Model.Proizvod.Proizvodjac">Proizvodjac: </label>
                 <input asp-for="@Model.Proizvod.Proizvodjac" class="form-control izmena" disabled />
             </div>
-            @if (Model.Imas.Count != null)
+
+            @for (var i = 0; i < Model.Apoteke.Count; i++)
             {
-
-                <div class="form-group">
-                    <table>
-                        <thead style="color: #8c8c8c;">
-                        <th>Naziv apoteke</th>
-                        <th>Grad</th>
-                        <th>Ulica i broj</th>
-                        <th>Broj telefona</th>
-                        <th>Cena</th>
-                        </thead>
-                        <tbody id="tbody">
-
-                           
-                        @for (var j = 0; j < Model.Imas.Count; j++)
+                <button type="button" class="accordion">Apoteka @Model.Apoteke[i].Naziv</button>
+                <div class="panel">
+                    @for (var j = 0; j < Model.Imas.Count; j++)
+                    {
+                        @if (Model.Apoteke[i] == Model.Imas[j].ApootekaVeza)
                         {
-                            var a = j + 1;
-                            <tr>
-                                <td><input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].ApootekaVeza.Naziv" disabled></td>
-                                <td><input type="text" id="@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.Grad" disabled></td>
-                                <td><input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.UlicaBr" disabled></td>
-                                <td><input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.BrojTelefona" disabled></td>
-                                <td><input type="text" id="d_@a" class="form-control" asp-for="@Model.Imas[j].Cena" disabled></td>
-                            </tr>
+                            var a = i + 10;
+                            <div class="mojdiv">
+                                <input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.Grad" disabled>
+                                <input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.UlicaBr" disabled>
+                                <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.BrojTelefona" disabled>
+                                <input type="text" id="e_@a" class="form-control izmena" asp-for="@Model.Imas[j].Cena" disabled>
+                                <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>
+                            </div>
                         }
-
-                            
-
-                        </tbody>
-                    </table>
+                    }
                 </div>
             }
 
-        </form>
+            </form>
 
     </div>
 </div>
+
+<script src="~/temp/jquery-3.4.1.min.js"></script>
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+    }
+</script>

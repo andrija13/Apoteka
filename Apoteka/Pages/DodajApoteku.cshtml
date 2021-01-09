@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <h4>Dodaj apoteku</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -30,42 +30,60 @@
                 <label asp-for="Apoteka.BrojTelefona">Broj telefona: </label>
                 <input asp-for="Apoteka.BrojTelefona" class="form-control" />
             </div>
+
+            <div class="form-group">
+                <label>Vas logo: </label>
+                <div class="custom-file" style="text-align:left; white-space:nowrap;">
+                    <input asp-for="Photo" class="custom-file-input form-control" />
+                    <label class="custom-file-label">Izaberite fotografiju...</label>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label for="exampleFormControlInput1">Broj lokacije:</label>
                 <input type="number" min="1" class="form-control bend" id="brclanova">
-                <button type="button" class="btn btn-outline-dark" value="CREATE" id="btnNoOfRec" style="margin-top: 5px;">Unesi clanove (opciono)</button>
+                <button type="button" class="btn btn-outline-dark" value="CREATE" id="btnNoOfRec" style="margin-top: 5px;">Unesi lokacije</button>
             </div>
-            <div id="ClanoviDiv">
+            <div>
+            <div id="LokacijeDiv">
 
             </div>
-
+            <div>
             <button type="submit" asp-page-handler="Dodaj" class="btn btn-primary">Dodaj apoteku</button>
         </form>
         </div>
     </div>
 
 
-        <script src="~/temp/jquery-3.4.1.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#btnNoOfRec").click(function () {
-                    $('#ClanoviDiv').empty();
-                    var NoOfRec = $('#brclanova').val();
+<script src="~/temp/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnNoOfRec").click(function () {
+            $('#LokacijeDiv').empty();
+            var NoOfRec = $('#brclanova').val();
 
-                    if (NoOfRec > 0) {
-                        createControl(NoOfRec);
-                    }
-                });
+            if (NoOfRec > 0) {
+                createControl(NoOfRec);
+            }
+        });
 
-                function createControl(NoOfRec) {
-                    var tbl = "";
+        function createControl(NoOfRec) {
+            var tbl = "";
 
-                    tbl = "<table>" + "<tr>" + "<th>Grad</th>" + "<th>Ulica i broj</th>" + "<th>Broj telefona</th>" + "</tr>";
-                    for (var i = 0; i < NoOfRec; i++) {
-                        tbl += "<tr>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].Grad' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].UlicaBr' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].BrojTelefona' />" + "</td>" + "</tr>";
-                    }
-                    tbl += "</table>";
-                    $('#ClanoviDiv').append(tbl);
-                }
-            });
-        </script>
+            tbl = "<table>" + "<tr>" + "<th>Grad</th>" + "<th>Ulica i broj</th>" + "<th>Broj telefona</th>" + "</tr>";
+            for (var i = 0; i < NoOfRec; i++) {
+                tbl += "<tr>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].Grad' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].UlicaBr' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].BrojTelefona' />" + "</td>" + "</tr>";
+            }
+            tbl += "</table>";
+            $('#LokacijeDiv').append(tbl);
+        }
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.custom-file-input').on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    });
+</script>

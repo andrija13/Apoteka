@@ -47,7 +47,7 @@ namespace Apoteka.Pages
             Proizvod = JsonConvert.DeserializeObject<Proizvod>(rezp.Data);
 
             var apoteka =_context.GraphClient.Cypher.Match("(n:Apoteka) -[:SE_NALAZI_U]->(l: Lokacija) -[:IMA]->(p: Proizvod{ ID:"+id+"}) ").Return(n => n.As<Node<string>>());
-            var rez = apoteka.Results;
+            var rez = apoteka.Results.Distinct<Node<string>>();
             Apoteke=rez.Select(node => JsonConvert.DeserializeObject<ApotekaModel>(node.Data)).ToList();
             foreach(ApotekaModel ap in Apoteke)
             {
