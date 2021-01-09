@@ -8,8 +8,8 @@
         <form method="post">
             <h4>Profil apoteke</h4>
             <hr />
-            <button type="button" class="btn btn-primary" id="DodajProizvodbtn" data-toggle="modal" data-target="#dodajProizvod">Izmeni apoteku</button>
-            <button type="button" class="btn btn-primary" id="Izmenibtn">Izmeni apoteku</button>
+            <button type="button" class="btn btn-primary" id="DodajProizvodbtn" data-toggle="modal" data-target="#dodajProizvod">Dodaj proizvod</button>
+            <button type="button" class="btn btn-primary" id="Izmenibtn">Izmeni informacije i cene proizvoda</button>
             <button type="submit" class="btn btn-primary" id="Uklonibtn" asp-page-handler="UkloniApoteku">Ukloni apoteku</button>
             <div class="form-group">
                 <label hidden asp-for="Apoteka.ApotekaID"></label>
@@ -106,7 +106,7 @@
 
 
 
-            <div class="form-group">
+            @*<div class="form-group">
                 <table>
                     <thead style="color: #8c8c8c;">
                     <th>Naziv leka</th>
@@ -133,7 +133,7 @@
                         }
                     </tbody>
                 </table>
-            </div>
+            </div>*@
 
             @for (var i = 0; i < Model.MojeLokacije.Count; i++)
             {
@@ -144,14 +144,15 @@
                         @if (Model.MojeLokacije[i] == Model.Imas[j].LokacijaVeza)
                         {
                             var a = i + 10;
+                    <div class="mojdiv">
+                        <input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Naziv" disabled>
+                        <input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Kategorija" disabled>
+                        <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Proizvodjac" disabled>
+                        <input type="text" id="e_@a" class="form-control izmena" asp-for="@Model.Imas[j].Cena" disabled>
+                        <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>
 
-                           <span><input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Naziv" disabled>
-                            <input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Kategorija" disabled>
-                            <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Proizvodjac" disabled>
-                            <input type="text" id="e_@a" class="form-control" asp-for="@Model.Imas[j].Cena" disabled>
-                            <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>
-                            <button type="submit" id="g_@a" asp-route-idVeza="@Model.Imas[j].VezaID" asp-page-handler="UkloniVezu" class="btn btn-outline-dark" style="margin-top: 5px;"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button>
-                            </span>
+                        <button type="submit" id="g_@a" asp-route-idVeza="@Model.Imas[j].VezaID" asp-page-handler="UkloniVezu" class="btn btn-outline-dark" style="margin-top: 5px;"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button>
+                     </div>
                         }
                     }
                     </div>

@@ -143,6 +143,13 @@ namespace Apoteka.Pages
                 }
             }
 
+           foreach(Ima i in Imas)
+            {
+                await _context.GraphClient.Cypher.Match("(p:Proizvod)<-[r:IMA{ID:"+i.VezaID+"}]-(l:Lokacija)").Set("r.Cena = '" +i.Cena+"'").ExecuteWithoutResultsAsync();
+
+            }
+
+
             return RedirectToPage("ProfilApoteke", new { id = Apoteka.ApotekaID });
         }
         public async Task<IActionResult> OnPostUkloniLokacijuAsync(string idlok)
