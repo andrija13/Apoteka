@@ -3,7 +3,7 @@
 @{
 }
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form method="post">
             <h4>Profil apoteke</h4>
             <hr />
@@ -123,7 +123,8 @@
                                <td><input type="text" id="b_@a" class="form-control"  asp-for="@Model.Imas[i].ProizvodVeza.Kategorija" disabled></td>
                                 <td><input type="text" id="c_@a" class="form-control"  asp-for="@Model.Imas[i].ProizvodVeza.Proizvodjac" disabled></td>
                                 <td><input type="text" id="e_@a" class="form-control" asp-for="@Model.Imas[i].Cena" disabled></td>
-                                <td><input type="text" id="f_@a" class="form-control"  asp-for="@Model.Imas[i].LokacijaVeza.UlicaBr" disabled></td>
+                                <td><input type="text" id="f_@a" class="form-control"  value="@Model.Imas[i].LokacijaVeza.Grad @Model.Imas[i].LokacijaVeza.UlicaBr" disabled></td>
+                                <td><input type="text" id="y_@a" class="form-control"  asp-for="@Model.Imas[i].LokacijaVeza.BrojTelefona" disabled></td>
 
                                 <td><input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[i].VezaID"  hidden></td>
                                 <td> <button type="submit"  id="g_@a" asp-route-idVeza="@Model.Imas[i].VezaID" asp-page-handler="UkloniVezu" class="btn btn-outline-dark" style="margin-top: 5px;"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>

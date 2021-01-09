@@ -180,6 +180,10 @@ namespace Apoteka.Pages
                 var provera = lokacija.Results;
                 if (provera.Count() == 0)
                 {
+                    while(Cene[br] == null)
+                    {
+                        br++;
+                    }
                     await _context.GraphClient.Cypher.Match("(p:Proizvod),(l:Lokacija)").Where("p.ID=" + IzabraniProizvod + " AND l.ID=" + ml.ID)
                                         .Create("(l)-[r:IMA {Cena:'" + Cene[br] + "'}]->(p)").ExecuteWithoutResultsAsync();
 
@@ -188,7 +192,7 @@ namespace Apoteka.Pages
                     string idv = r.Reference.Id.ToString();
 
                     await _context.GraphClient.Cypher.Match("(p:Proizvod{ID:" + IzabraniProizvod + "})<-[r:IMA]-(l:Lokacija{ID:" + ml.ID + "})").Set("r.ID = " + idv).ExecuteWithoutResultsAsync();
-
+                    
                     br++;
                 }
                 
