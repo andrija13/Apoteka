@@ -1,0 +1,30 @@
+﻿@page
+@model Apoteka.Pages.SveApotekeModel
+@{
+
+}
+
+<form>
+
+@if (@Model.Apoteke.Count == 0)
+{
+    <a class="text-dark" asp-page="./DodajApoteku">
+        <h5 class="obavestenje"> <ion-icon name="add-circle-outline"></ion-icon> Trenutno nema apoteka! Napravite prvi!</h5>
+    </a>
+}
+<div class="row">
+    @foreach (var apoteka in @Model.Apoteke)
+    {
+        var photoPath = "~/imagesApoteke/" + (apoteka.Slika ?? "Logo.png");
+        <div class="col-lg-4">
+            <div class="card">
+                <a class="text-dark" asp-route-Id="@apoteka.ApotekaID" asp-page="/ProfilApoteke"> <img class="card-img-top" style="border-radius: 5%; width: 260px; height:260px;" src="@photoPath" alt="Card image cap" asp-append-version="true" /><h5 class="card-header">@apoteka.Naziv</h5> </a>
+                <div class="card-body">
+                    <h5 class="card-title">Direktor @apoteka.Direktor</h5>
+                    <p class="card-text desc">@apoteka.BrojTelefona</p>
+                    <p class="card-text"><ion-icon name="location-outline"></ion-icon> @apoteka.Email<br></p>
+                </div>
+            </div>
+        </div>
+    }
+</form>
