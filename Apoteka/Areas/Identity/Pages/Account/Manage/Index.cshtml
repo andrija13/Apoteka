@@ -4,12 +4,13 @@
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
+<link rel="stylesheet" href="~/css/DodajApoteku.css">
 
-<h4>@ViewData["Title"]</h4>
-@*<partial name="_StatusMessage" model="Model.StatusMessage" />*@
 <div class="row">
+    <div class="col-md-3"></div>
     <div class="col-md-6">
         <form id="profile-form" method="post">
+            <h4>Pregled profila</h4>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Username"></label>
@@ -42,9 +43,12 @@
                 <input asp-for="Input.NovaLozinka" class="form-control" />
             </div>
 
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+            <div class="dodaj">
+                <button id="update-profile-button" type="submit" class="btn btn-success">Sacuvaj</button>
+            </div>
         </form>
     </div>
+    <div class="col-md-3"></div>
 </div>
 
 @section Scripts {

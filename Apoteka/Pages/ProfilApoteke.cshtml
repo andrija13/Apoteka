@@ -1,22 +1,24 @@
 ﻿@page
 @model Apoteka.Pages.ProfilApotekeModel
 @{
-    var photoPath = "~/imagesApoteke/" + (Model.Apoteka.Slika ?? "Logo.png");
+    var photoPath = "~/images/" + (Model.Apoteka.Slika ?? "Logo.png");
 }
 <link href="~/css/ProfilApoteke.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4">
+        <div class="text-center">
+            <img src="@photoPath" class="avatar img-circle" alt="avatar" asp-append-version="true" style="border-radius: 50%; width: 250px; height:250px; margin-bottom:25px">
+
+            <button type="button" class="btn btn-outline-success" id="DodajProizvodbtn" data-toggle="modal" data-target="#dodajProizvod">Dodaj proizvod</button>
+            <button type="button" class="btn btn-outline-success" id="Izmenibtn">Izmeni informacije i cene proizvoda</button>
+            <button type="submit" class="btn btn-outline-success" id="Uklonibtn" asp-page-handler="UkloniApoteku">Ukloni apoteku</button>
+            <button type="button" class="btn btn-outline-success" id="ZahtevajProizvodbtn" data-toggle="modal" data-target="#zahtevajProizvod">Zahtevaj novi proizvod</button>
+        </div> 
+    </div>
+    <div class="col-md-8">
         <form method="post" enctype="multipart/form-data">
             <h4>Profil apoteke</h4>
             <hr />
-
-            <div class="text-center">
-                <img src="@photoPath" class="avatar img-circle" alt="avatar" asp-append-version="true" style=" border-radius: 5%; width: 260px; height:260px; padding-bottom:10px">
-            </div> 
-
-            <button type="button" class="btn btn-primary" id="DodajProizvodbtn" data-toggle="modal" data-target="#dodajProizvod">Dodaj proizvod</button>
-            <button type="button" class="btn btn-primary" id="Izmenibtn">Izmeni informacije i cene proizvoda</button>
-            <button type="submit" class="btn btn-primary" id="Uklonibtn" asp-page-handler="UkloniApoteku">Ukloni apoteku</button>
             <div class="form-group">
                 <label hidden asp-for="Apoteka.ApotekaID"></label>
                 <input hidden asp-for="Apoteka.ApotekaID" class="form-control" />
@@ -56,7 +58,7 @@
                     <label for="exampleFormControlInput1" id="brLok">@Model.Lokacije.Count </label>
                     <input id="broj" asp-for="@Model.Lokacije.Count" hidden />
                     <br />
-                    <button onclick="dodajLokaciju()" type="button" hidden class="btn btn-outline-dark sacuvaj" value="CREATE" id="btnNoOfRec" style="margin-top: 5px;">Dodaj lokaciju</button>
+                    <button onclick="dodajLokaciju()" type="button" hidden class="btn btn-outline-success sacuvaj" value="CREATE" id="btnNoOfRec" style="margin: 5px 0 25px 0;">Dodaj lokaciju</button>
                     <table>
                         <thead style="color: #8c8c8c;">
                         <th>Grad</th>
@@ -74,7 +76,7 @@
                                     <td><input type="text" id="cc_@a" class="form-control" asp-for="@Model.Lokacije[i].UlicaBr" disabled></td>
                                     <td><input type="text" id="dd_@a" class="form-control" asp-for="@Model.Lokacije[i].BrojTelefona" disabled></td>
                                     <input type="text" id="aa_@a" class="form-control" asp-for="@Model.Lokacije[i].ID" hidden>
-                                    <td> <button type="submit" onclick="obrisi(@a,this)" asp-route-idlok="@Model.Lokacije[i].ID" asp-page-handler="UkloniLokaciju" class="btn btn-outline-dark" style="margin-top: 5px;"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
+                                    <td> <button type="submit" onclick="obrisi(@a,this)" asp-route-idlok="@Model.Lokacije[i].ID" asp-page-handler="UkloniLokaciju" class="btn btn-outline-danger"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
                                 </tr>
                             }
 
@@ -83,7 +85,7 @@
                 </div>
             }
 
-            <!-- Modal box za dodavanje zauzetih termina -->
+            <!-- Modal box za dodavanje proizvoda -->
             <div class="modal fade" id="dodajProizvod" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -95,56 +97,138 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-
-                                <label for="TipProslaveT">Izaberite proizvod: </label>
-                                <select class="form-control zahtev" asp-for="@Model.IzabraniProizvod" asp-items="@Model.SviProizvodi" id="TipProslaveT">
-                                    <option value="" selected disabled hidden>Izaberite proizvod:</option>
+                                <label for="TipProizvoda">Izaberite proizvod: </label>
+                                <select class="form-control zahtev" asp-for="@Model.IzabraniProizvod" asp-items="@Model.SviProizvodi" id="TipProizvoda" required>
+                                    <option value="" selected disabled hidden>Prikazi proizvode:</option>
                                 </select>
                                 @for (var i = 0; i < @Model.Lokacije.Count; i++)
                                 {
                                     var r = "Lokacije_" + i + "__Sel";
-                                    <div>
-                                        <td class="js-export-checkbox">
+                                    <div class="row lokacije">
+                                        <div class="col-6 checkbox">
                                             @Html.CheckBoxFor(m => m.Lokacije[i].Sel)
-                                        </td>
-                                        <label for="@r">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
-                                        <br />
-                                        <label> Cena: </label> <input class="form-control" type="number" id="@i" asp-for="@Model.Cene" />
+                                            <label for="@r">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
+                                        </div>
+                                        <div class="col-6"><input class="form-control cena" type="number" id="@i" asp-for="@Model.Cene" placeholder="Cena" />
+                                        din.
+                                        </div>
                                     </div>
                                 }
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <button type="button" onclick="otkazi()" class="btn btn-outline-dark" data-dismiss="modal">Poništi</button>
+                            <button type="submit" onclick="promeni()" asp-page-handler="DodajProizvod" class="btn btn-success">Potvrdi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+			<!-- Modal box za dodavanje zauzetih termina -->
+            <div class="modal fade" id="zahtevajProizvod" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Zahtevaj novi proizvod</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label asp-for="ZahtevaniProizvod.Naziv">Naziv proizvoda: </label>
+                                <input asp-for="ZahtevaniProizvod.Naziv" class="form-control zahtev1" required />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ZahtevaniProizvod.Kategorija">Kategorija proizvoda (INN): </label>
+                                <input asp-for="ZahtevaniProizvod.Kategorija" class="form-control zahtev1" required />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ZahtevaniProizvod.Proizvodjac">Proizvodjac: </label>
+                                <input asp-for="ZahtevaniProizvod.Proizvodjac" class="form-control zahtev1" required />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ZahtevaniProizvod.Opis">Opis </label>
+                                <input asp-for="ZahtevaniProizvod.Opis" class="form-control zahtev1" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Fotografija proizvoda: </label>
+                                <div class="custom-file" style="text-align:left; white-space:nowrap;">
+                                    <input asp-for="PhotoProizvod" class="custom-file-input1 form-control" />
+                                    <label class="custom-file-label1">Izaberite fotografiju...</label>
+                                </div>
+                            </div>
+                            @for (var i = 0; i < @Model.Lokacije.Count; i++)
+                            {
+                                var r = "Lokacije_" + i + "__Sel";
+                                <div>
+                                    <td class="js-export-checkbox">
+                                        @Html.CheckBoxFor(m => m.Lokacije[i].Sel)
+                                    </td>
+                                    <label for="@r">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
+                                    <br />
+                                    <label> Cena: </label> <input class="form-control" type="number" id="ml_@i" asp-for="@Model.Cene" />
+                                </div>
+                            }
+
+                        </div>
+                        <div class="modal-footer">
                             <button type="button" onclick="otkazi()" class="btn btn-secondary" data-dismiss="modal">Poništi</button>
-                            <button type="submit" asp-page-handler="DodajProizvod" class="btn btn-primary">Potvrdi</button>
+                            <button type="submit" onclick="promeni1()" asp-page-handler="ZahtevajProizvod" class="btn btn-primary">Potvrdi</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            @for (var i = 0; i < Model.MojeLokacije.Count; i++)
+            @if (@Model.MojeLokacije.Count > 0)
             {
-                <button type="button" class="accordion">@Model.MojeLokacije[i].Grad - @Model.MojeLokacije[i].UlicaBr - @Model.MojeLokacije[i].BrojTelefona</button>
-                <div class="panel">
-                    @for (var j = 0; j < Model.Imas.Count; j++)
-                    {
-                        @if (Model.MojeLokacije[i] == Model.Imas[j].LokacijaVeza)
+                <label>Proizvodi po lokacijama: </label>
+                @for (var i = 0; i < Model.MojeLokacije.Count; i++)
+                {
+                    <button type="button" class="accordion">@Model.MojeLokacije[i].Grad - @Model.MojeLokacije[i].UlicaBr - @Model.MojeLokacije[i].BrojTelefona</button>
+                    <div class="panel">
+                        <table style="margin-bottom: 10px;">
+                        <thead style="color: #8c8c8c;">
+                        <th>Naziv</th>
+                        <th>Kategorija</th>
+                        <th>Proizvodjac</th>
+                        <th>Cena(din.)</th>
+                        </thead>
+                        <tbody id="tbody">
+                        @for (var j = 0; j < Model.Imas.Count; j++)
                         {
-                            var a = i + 10;
-                            <div class="mojdiv">
-                                <input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Naziv" disabled>
-                                <input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Kategorija" disabled>
-                                <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Proizvodjac" disabled>
-                                <input type="text" id="e_@a" class="form-control izmena" asp-for="@Model.Imas[j].Cena" disabled>
-                                <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>
-                                <button type="submit" id="g_@a" asp-route-idVeza="@Model.Imas[j].VezaID" asp-page-handler="UkloniVezu" class="btn btn-outline-dark" style="margin-top: 5px;"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button>
-                            </div>
+                            @if (Model.MojeLokacije[i] == Model.Imas[j].LokacijaVeza)
+                            {
+                                var a = i + 10;
+                                <tr>
+                                    <td>
+                                    <input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Naziv" disabled>
+                                    </td>
+                                    <td>
+                                    <input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Kategorija" disabled>
+                                    </td>
+                                    <td>
+                                    <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Proizvodjac" disabled>
+                                    </td>
+                                    <td>
+                                    <input type="text" id="e_@a" class="form-control izmena" asp-for="@Model.Imas[j].Cena" disabled>
+                                    </td>
+                                    <td>
+                                    <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>
+                                    </td>
+                                    <td>
+                                    <button type="submit" id="g_@a" asp-route-idVeza="@Model.Imas[j].VezaID" asp-page-handler="UkloniVezu" class="btn btn-outline-danger"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button>
+                                    </td>
+                                </tr>
+                            }
                         }
-                    }
-                </div>
+                        </tbody>
+                    </table>
+                    </div>
+                }
             }
 
-            <button type="submit" class="btn btn-primary sacuvaj" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button>
+            <button type="submit" class="btn btn-success sacuvaj" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button>
         </form>
 
     </div>
@@ -154,17 +238,46 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        
+
+        $('#zahtevajProizvod , #dodajProizvod').on('hidden.bs.modal', function (e) {
+            $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+                .find("input[type=checkbox], input[type=radio]")
+                .prop("checked", "")
+                .end()
+        });
+
         $("#Izmenibtn").click(function () {
             var r = document.getElementsByClassName("izmena");
             for (var i = 0; i < r.length; i++) {
-                r[i].removeAttribute("disabled");
+                if (r[i].hasAttribute("disabled")) {
+                    r[i].removeAttribute("disabled");
+                }
+                else
+                    r[i].disabled = true;
             }
             var sacuvaj = document.getElementsByClassName("sacuvaj");
             for (var i = 0; i < sacuvaj.length; i++) {
-                sacuvaj[i].removeAttribute("hidden");
+                if (sacuvaj[i].hasAttribute("hidden"))
+                    sacuvaj[i].removeAttribute("hidden");
+                else
+                    sacuvaj[i].hidden = true;
             }
         });
+
+        $('.custom-file-input').on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+
+        $('.custom-file-input1').on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).next('.custom-file-label1').html(fileName);
+        });
+
+
     });
 
     function dodajLokaciju() {
@@ -195,6 +308,7 @@
 
     }
 
+
     function obrisi(idLok, dugme) {
         var brLok = document.getElementById('brLok').innerHTML;
         brLok--;
@@ -218,6 +332,7 @@
         broj.hidden = true;
         dugme.hidden = true;
     }
+
 </script>
 <script>
     var acc = document.getElementsByClassName("accordion");
@@ -235,11 +350,50 @@
         });
     }
 </script>
+<script src="~/temp/jquery-3.4.1.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('.custom-file-input').on("change", function () {
-            var fileName = $(this).val().split("\\").pop();
-            $(this).next('.custom-file-label').html(fileName);
-        });
-    });
+    function otkazi() {
+        var r = document.getElementsByClassName("zahtev1");
+        for (var i = 0; i < r.length; i++) {
+            if (r[i].hasAttribute("required")) {
+                r[i].removeAttribute("required");
+            }
+        }
+        r = document.getElementsByClassName("zahtev");
+        for (var i = 0; i < r.length; i++) {
+            if (r[i].hasAttribute("required")) {
+                r[i].removeAttribute("required");
+            }
+        }
+    }
+
+    function promeni() {
+        var r = document.getElementsByClassName("zahtev1");
+        for (var i = 0; i < r.length; i++) {
+            if (r[i].hasAttribute("required")) {
+                r[i].removeAttribute("required");
+            }
+        }
+
+        r = document.getElementsByClassName("zahtev");
+        for (var i = 0; i < r.length; i++) {
+            r[i].setAttribute("required", "true");
+        }
+
+    }
+
+    function promeni1() {
+        var r = document.getElementsByClassName("zahtev");
+        for (var i = 0; i < r.length; i++) {
+            if (r[i].hasAttribute("required")) {
+                r[i].removeAttribute("required");
+            }
+        }
+
+        r = document.getElementsByClassName("zahtev1");
+        for (var i = 0; i < r.length; i++) {
+            r[i].setAttribute("required", "true");
+        }
+    }
 </script>
+

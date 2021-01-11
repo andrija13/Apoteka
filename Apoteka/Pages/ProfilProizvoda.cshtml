@@ -3,51 +3,53 @@
 @{
     var photoPath = "~/images/" + (Model.Proizvod.Slika ?? "Logo.png");
 }
-<link href="~/css/ProfilApoteke.css" rel="stylesheet" />
+<link href="~/css/ProfilProizvoda.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5 proizvod">
         <form method="post">
-            <h4>@Model.Proizvod.Naziv</h4>
-            <h6>@Model.Proizvod.Kategorija</h6>
-            <hr />
+            @* <h4>@Model.Proizvod.Naziv</h4> *@
+            @* <h6>@Model.Proizvod.Kategorija</h6> *@
+            @* <hr /> *@
             <div class="form-group">
                 <label hidden asp-for="@Model.Proizvod.ID"></label>
                 <input hidden asp-for="@Model.Proizvod.ID" class="form-control" />
             </div>
-            <div class="text-center">
+            <div class="text-center" style="padding-bottom: 45px;">
                 <img src="@photoPath" class="avatar img-circle" alt="avatar" asp-append-version="true" style="border-radius: 5%; width: 260px; height:260px; padding-bottom:10px">
             </div>
-
-            <div class="form-group">
-                <label asp-for="@Model.Proizvod.Opis">Opis: </label>
-                <input type="text" asp-for="@Model.Proizvod.Opis" class="form-control izmena" disabled />
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Proizvod.Proizvodjac">Proizvodjac: </label>
-                <input asp-for="@Model.Proizvod.Proizvodjac" class="form-control izmena" disabled />
-            </div>
-
-            @for (var i = 0; i < Model.Apoteke.Count; i++)
-            {
-                <button type="button" class="accordion">Apoteka @Model.Apoteke[i].Naziv</button>
-                <div class="panel">
-                    @for (var j = 0; j < Model.Imas.Count; j++)
-                    {
-                        @if (Model.Apoteke[i] == Model.Imas[j].ApootekaVeza)
-                        {
-                            var a = i + 10;
-                            <div class="mojdiv">
-                                <input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.Grad" disabled>
-                                <input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.UlicaBr" disabled>
-                                <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.BrojTelefona" disabled>
-                                <input type="text" id="e_@a" class="form-control izmena" asp-for="@Model.Imas[j].Cena" disabled>
-                                <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>
-                            </div>
-                        }
-                    }
+            <div class="opis-proizvoda">
+                <h4>@Model.Proizvod.Naziv</h4>
+                <h6>@Model.Proizvod.Kategorija</h6>
+                <div class="form-group">
+                    <label asp-for="@Model.Proizvod.Opis">Opis: </label>
+                    <input type="text" asp-for="@Model.Proizvod.Opis" class="form-control" disabled />
                 </div>
-            }
+                <div class="form-group">
+                    <label asp-for="@Model.Proizvod.Proizvodjac">Proizvodjac: </label>
+                    <input asp-for="@Model.Proizvod.Proizvodjac" class="form-control" disabled />
+                </div>
 
+                @for (var i = 0; i < Model.Apoteke.Count; i++)
+                {
+                    <button type="button" class="accordion">Apoteka @Model.Apoteke[i].Naziv</button>
+                    <div class="panel">
+                        @for (var j = 0; j < Model.Imas.Count; j++)
+                        {
+                            @if (Model.Apoteke[i] == Model.Imas[j].ApootekaVeza)
+                            {
+                                var a = i + 10;
+                                <div class="mojdiv">
+                                    <input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.Grad" disabled>
+                                    <input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.UlicaBr" disabled>
+                                    <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.BrojTelefona" disabled>
+                                    <input type="text" id="e_@a" class="form-control izmena" asp-for="@Model.Imas[j].Cena" disabled>
+                                    <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
             </form>
 
     </div>

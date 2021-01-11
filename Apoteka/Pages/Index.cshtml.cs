@@ -56,7 +56,7 @@ namespace Apoteka.Pages
             for (int i=0;i<Proizvodi.Count;i++)
             {
                 Proizvodi[i].ID = Ids[i];
-                await _context.GraphClient.Cypher.Match("(n:ProizvodVeza { Naziv:'" + Proizvodi[i].Naziv + "', Proizvodjac:'" + Proizvodi[i].Proizvodjac + "',Opis:'"+Proizvodi[i].Opis+"' })").Set("n.VezaID = " + Ids[i]).ExecuteWithoutResultsAsync();
+                await _context.GraphClient.Cypher.Match("(n:Proizvod { Naziv:'" + Proizvodi[i].Naziv + "', Proizvodjac:'" + Proizvodi[i].Proizvodjac + "',Opis:'"+Proizvodi[i].Opis+"' })").Set("n.ID = " + Ids[i]).ExecuteWithoutResultsAsync();
 
             }
 

@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
+
+.row{
+    display: grid;
+    place-items: center;
+    padding-top: 45px;
+    padding-bottom: 45px;
+}
+.proizvod{
+    background: #fff;
+    -webkit-box-shadow: 0 0 15px 0 rgba(0,0,0,0.25);
+    box-shadow: 0 0 15px 0 rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 0;
+}
+.opis-proizvoda{
+    background: #f5f5f5;
+    width: 100%;
+    padding: 25px 45px 45px 45px;
+    border-radius: 15px 15px 10px 10px;
+}
+.opis-proizvoda h4{
+    font-family: 'Roboto';
+}
+.opis-proizvoda h6{
+    font-family: 'Roboto';
+    color: #a7a7a7;
+    padding-bottom: 10px;
+}
+.opis-proizvoda label{
+    color: #a7a7a7;
+    font-family: 'Roboto';
+    font-weight: 500;
+}
+.form-control:disabled{
+    background: #fff;
+    border: none;
+    border-bottom: 1px solid #a7a7a7;
+    border-radius: 0;
+    border-left: 1px solid #a7a7a7;
+    font-family: 'Roboto';
+    font-weight: 300;
+}
+.izmena{
+    border-right: 1px solid #a7a7a7 !important;
+}
+/* Accordion */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+.active, .accordion:hover {
+    background-color: #ccc;
+}
+.panel {
+    background-color: white;
+    display:none;
+    overflow: hidden;
+}
+.mojdiv{
+    display:flex;
+}

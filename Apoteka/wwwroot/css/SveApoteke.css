@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
+
+.card{
+    border: none;
+    border-radius: 0;
+    -webkit-box-shadow: 0 0 15px 0 rgba(0,0,0,0.25);
+    box-shadow: 0 0 15px 0 rgba(0,0,0,0.25);
+    padding: 45px;
+    font-family: 'Roboto';
+}
+.row{
+    padding: 25px 0 25px 0;
+}
+.pozadina{
+    width: 100%;
+    height: 180px;
+    background: url("../images/pharmacy.jpg");
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    filter: blur(1px);
+}
+.card-img-top{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    z-index: 5;
+    position: relative;
+    border: 3px solid #fff;
+}
+.card-header{
+    padding-top: 25px;
+    background-color: #fff;
+    border: 0;
+}
+.card-body{
+    text-align: center;
+}
+.card-title{
+    margin: 0;
+}
+.card-text{
+    color: #a7a7a7;
+    margin: 0;
+}

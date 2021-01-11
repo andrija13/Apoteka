@@ -1,6 +1,75 @@
-﻿body {
-}
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
 
+.col-md-8 h4{
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    font-weight: 500;
+    color: #535353;
+}
+.col-md-4 button{
+    width: 200px;
+    margin-bottom: 10px;
+}
+.col-md-8 label{
+    font-family: 'Roboto';
+    font-weight: 100;
+    font-size: 16px;
+    color: #888888;
+}
+.col-md-8 .form-control{
+    border: none;
+    border-bottom: 2px solid #cccccc;
+    border-radius: 0;
+}
+.col-md-8 .form-control:disabled{
+    background: rgb(249 249 249);
+    color: #adadad;
+    font-family: 'Roboto';
+    font-weight: 300;
+}
+.custom-file-label{
+    border: none !important;
+    border-bottom: 2px solid #ced4da !important;
+    border-radius: 0 !important;
+    color: #cccccc !important;
+}
+.custom-file-input:lang(en)~.custom-file-label::after{
+    content: "Pretrazi";
+}
+::placeholder {
+    color: #dadada !important;
+    font-family: 'Roboto';
+    font-weight: 300;
+}
+table th{
+    font-family: 'Roboto';
+    font-weight: 100;
+    font-size: 16px;
+    color: #888888;
+}
+table td input{
+    border: 1px solid #cccccc !important;
+    border-radius: 5px !important;
+}
+.sacuvaj{
+    margin: 25px 0 25px 0;
+}
+/* Modal Box */
+.modal-header h5{
+    font-family: 'Roboto';
+}
+.cena{
+    display: inline;
+    width: 100px;
+    margin-left: 10px;
+}
+.lokacije{
+    padding-top: 15px;
+}
+.checkbox{
+    padding-top: 10px;
+}
+/* Accordion */
 .accordion {
     background-color: #eee;
     color: #444;
@@ -12,13 +81,9 @@
     outline: none;
     transition: 0.4s;
 }
-
-    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-    .active, .accordion:hover {
-        background-color: #ccc;
-    }
-
-/* Style the accordion panel. Note: hidden by default */
+.active, .accordion:hover {
+    background-color: #ccc;
+}
 .panel {
     padding: 0 18px;
     background-color: white;

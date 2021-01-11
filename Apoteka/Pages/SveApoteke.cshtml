@@ -3,6 +3,7 @@
 @{
 
 }
+<link href="~/css/SveApoteke.css" rel="stylesheet" />
 
 <form>
 
@@ -15,14 +16,18 @@
 <div class="row">
     @foreach (var apoteka in @Model.Apoteke)
     {
-        var photoPath = "~/imagesApoteke/" + (apoteka.Slika ?? "Logo.png");
+        var photoPath = "~/images/" + (apoteka.Slika ?? "Logo.png");
         <div class="col-lg-4">
             <div class="card">
-                <a class="text-dark" asp-route-Id="@apoteka.ApotekaID" asp-page="/ProfilApoteke"> <img class="card-img-top" style="border-radius: 5%; width: 260px; height:260px;" src="@photoPath" alt="Card image cap" asp-append-version="true" /><h5 class="card-header">@apoteka.Naziv</h5> </a>
+                <a class="text-dark" style="text-align: center;" asp-route-Id="@apoteka.ApotekaID" asp-page="/ProfilApoteke"> 
+                    <div class="pozadina"></div>
+                    <img class="card-img-top" src="@photoPath" alt="Card image cap" asp-append-version="true" />
+                    <h5 class="card-header">@apoteka.Naziv</h5> 
+                </a>
                 <div class="card-body">
-                    <h5 class="card-title">Direktor @apoteka.Direktor</h5>
-                    <p class="card-text desc">@apoteka.BrojTelefona</p>
-                    <p class="card-text"><ion-icon name="location-outline"></ion-icon> @apoteka.Email<br></p>
+                    <h5 class="card-title">Direktor: @apoteka.Direktor</h5>
+                    <p class="card-text desc"><ion-icon name="call-outline" style="vertical-align: -2px;"></ion-icon>@apoteka.BrojTelefona</p>
+                    <p class="card-text"><ion-icon name="mail-outline" style="vertical-align: -2px;"></ion-icon> @apoteka.Email<br></p>
                 </div>
             </div>
         </div>

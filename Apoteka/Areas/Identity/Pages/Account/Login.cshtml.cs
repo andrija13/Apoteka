@@ -59,6 +59,7 @@ namespace Apoteka.Areas.Identity.Pages.Account
 
             [Required]
             [DataType(DataType.Password)]
+            [Display(Name = "Lozinka")]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]

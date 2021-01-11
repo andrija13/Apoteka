@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
+
+.col-md-6{
+    padding: 50px 0 50px 0;
+}
+.col-md-6 h4{
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    font-weight: 500;
+    color: #535353;
+}
+.col-md-6 label{
+    font-family: 'Roboto';
+    font-weight: 100;
+    font-size: 16px;
+    color: #888888;
+}
+.col-md-6 .form-control{
+    border: none;
+    border-bottom: 2px solid #cccccc;
+    border-radius: 0;
+}
+::placeholder {
+    color: #dadada !important;
+    font-family: 'Roboto';
+    font-weight: 300;
+}
+.col-md-6 .dodaj{
+    text-align: center;
+    padding-top: 25px;
+}
+.col-md-6 .btn-success{
+    padding: 8px 25px 8px 25px;
+}
+
+table th{
+    font-family: 'Roboto';
+    font-weight: 100;
+    font-size: 16px;
+    color: #888888;
+}
+table td input{
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
+
+.custom-file-label{
+    border: none !important;
+    border-bottom: 2px solid #ced4da !important;
+    border-radius: 0 !important;
+    color: #cccccc !important;
+}
+.custom-file-input:lang(en)~.custom-file-label::after{
+    content: "Pretrazi";
+}

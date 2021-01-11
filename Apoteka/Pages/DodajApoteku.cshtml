@@ -2,13 +2,13 @@
 @model Apoteka.Pages.DodajApotekuModel
 @{
 }
-
+<link rel="stylesheet" href="~/css/DodajApoteku.css">
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
         <form method="post" enctype="multipart/form-data">
-            <h4>Dodaj apoteku</h4>
-            <hr />
+            <h4>Dodaj Apoteku</h4>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label hidden asp-for="Apoteka.ApotekaID"></label>
@@ -16,19 +16,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="Apoteka.Naziv">Naziv: </label>
-                <input asp-for="Apoteka.Naziv" class="form-control" />
+                <input asp-for="Apoteka.Naziv" class="form-control" placeholder="Unesite naziv apoteke" autocomplete="off"/>
             </div>
             <div class="form-group">
                 <label asp-for="Apoteka.Email">Email: </label>
-                <input asp-for="Apoteka.Email" class="form-control" />
+                <input asp-for="Apoteka.Email" class="form-control" placeholder="Unesite email adresu" autocomplete="off" />
             </div>
             <div class="form-group">
                 <label asp-for="Apoteka.Direktor">Direktor: </label>
-                <input asp-for="Apoteka.Direktor" class="form-control" />
+                <input asp-for="Apoteka.Direktor" class="form-control" placeholder="Unesite ime i prezime direktora apoteke" autocomplete="off" />
             </div>
             <div class="form-group">
                 <label asp-for="Apoteka.BrojTelefona">Broj telefona: </label>
-                <input asp-for="Apoteka.BrojTelefona" class="form-control" />
+                <input asp-for="Apoteka.BrojTelefona" class="form-control" placeholder="Unesite broj telefona" autocomplete="off" />
             </div>
 
             <div class="form-group">
@@ -40,19 +40,21 @@
             </div>
 
             <div class="form-group">
-                <label for="exampleFormControlInput1">Broj lokacije:</label>
-                <input type="number" min="1" class="form-control bend" id="brclanova">
-                <button type="button" class="btn btn-outline-dark" value="CREATE" id="btnNoOfRec" style="margin-top: 5px;">Unesi lokacije</button>
+                <label for="exampleFormControlInput1">Broj lokacija:</label>
+                <input type="number" min="1" class="form-control bend" id="brclanova" placeholder="Unesite broj lokacija">
+                <button type="button" class="btn btn-outline-success" value="CREATE" id="btnNoOfRec" style="margin-top: 20px;">Unesi lokacije</button>
             </div>
             <div>
             <div id="LokacijeDiv">
 
             </div>
-            <div>
-            <button type="submit" asp-page-handler="Dodaj" class="btn btn-primary">Dodaj apoteku</button>
+            <div class="dodaj">
+                <button type="submit" asp-page-handler="Dodaj" class="btn btn-success">Dodaj</button>
+            </div>
         </form>
-        </div>
     </div>
+    <div class="col-md-3"></div>
+</div>
 
 
 <script src="~/temp/jquery-3.4.1.min.js"></script>
@@ -72,7 +74,7 @@
 
             tbl = "<table>" + "<tr>" + "<th>Grad</th>" + "<th>Ulica i broj</th>" + "<th>Broj telefona</th>" + "</tr>";
             for (var i = 0; i < NoOfRec; i++) {
-                tbl += "<tr>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].Grad' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].UlicaBr' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].BrojTelefona' />" + "</td>" + "</tr>";
+                tbl += "<tr>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].Grad' autocomplete='off' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].UlicaBr' autocomplete='off' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].BrojTelefona' autocomplete='off' />" + "</td>" + "</tr>";
             }
             tbl += "</table>";
             $('#LokacijeDiv').append(tbl);
