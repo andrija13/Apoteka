@@ -5,3 +5,51 @@
     ViewData["Title"] = "Home page";
 }
 
+<form id="formID" method="get">
+    <h1 style="color: #cacaca;font-weight: 100;font-family: Roboto;">Nadji Lek - Pretraga</h1>
+    <hr>
+    <div class="filter" style="display: flex;">
+
+        <input type="text" class="form-control" asp-for="@Model.FilterNaziv" placeholder="Unesite naziv leka"/>
+
+        <select class="form-control"  asp-for="@Model.GradFilter" asp-items="@Model.GradoviFilter" id="Grad">
+            <option value="" selected >Izaberite grad</option>
+        </select>
+
+        <select class="form-control"  asp-for="@Model.SortirajPoFilter" asp-items="@Model.SortirajPo" id="SortirajPo">
+            <option value="" selected>Sortiraj po</option>
+        </select>
+
+        <button class="btn btn-outline-primary search" type="submit"><ion-icon name="search-outline" style="vertical-align: -2px;"></ion-icon> Pretraži</button>
+    </div>
+    <br />
+
+    @if (Model.PretragaIma.Count > 0)
+    {
+    <div class="row lista-oglasa">
+       @foreach (var proizvod in @Model.PretragaIma)
+       {
+           var photoPath = "~/images/Logo.png";
+           @if (proizvod.ProizvodVeza.Slika != "")
+           {
+               photoPath = "~/images/" + proizvod.ProizvodVeza.Slika;
+           }
+            <div class="col-lg-4">
+                <div class="card">
+                    <a class="text-dark" asp-route-Id="@proizvod.ProizvodVeza.ID" asp-page="/ProfilProizvoda"> <img class="card-img-top" src="@photoPath" alt="Card image cap" asp-append-version="true" /><h5 class="card-header">@proizvod.ProizvodVeza.Naziv</h5></a>
+                    <div class="card-body">
+                        <h5 class="card-title">@proizvod.ProizvodVeza.Kategorija</h5>
+                        <p class="card-text desc">Opis: @proizvod.ProizvodVeza.Opis</p>
+                        <p class="card-text">Proizvodjac: @proizvod.ProizvodVeza.Proizvodjac</p>
+                        <p class="card-text">U apoteci @proizvod.ApootekaVeza.Naziv - @proizvod.LokacijaVeza.Grad po ceni od @proizvod.Cena din.</p>
+
+                    </div>
+                    <a asp-route-Id="@proizvod.ProizvodVeza.ID" asp-page="/ProfilProizvoda">
+                        <button class="more-btn" type="button">Više <ion-icon name="chevron-forward-circle-outline" style="vertical-align: text-bottom; font-size: 18px;"></ion-icon></button>
+                    </a>
+                </div>
+            </div>
+       }
+    </div>
+    }
+</form>

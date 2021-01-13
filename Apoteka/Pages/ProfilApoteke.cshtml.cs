@@ -71,7 +71,6 @@ namespace Apoteka.Pages
         }
         public void OnGet(string id)
         {
-
             var apoteka = _context.GraphClient.Cypher.Match("(n:Apoteka)").Where("n.ApotekaID= " + id).Return(n => n.As<Node<string>>());
             var rez = apoteka.Results.Single();
             Apoteka = JsonConvert.DeserializeObject<ApotekaModel>(rez.Data);
@@ -250,14 +249,14 @@ namespace Apoteka.Pages
                 ZahtevaniProizvod.Slika = ProcessUploadedFile(PhotoProizvod);
             }
 
-            await _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'"+ZahtevaniProizvod.Naziv+"', Kategorija:'"+ZahtevaniProizvod.Kategorija+"', Opis:'"+ZahtevaniProizvod.Opis+"',Proizvodjac:'"+ZahtevaniProizvod.Proizvodjac+"',Slika:'"+ZahtevaniProizvod.Slika+"'})").ExecuteWithoutResultsAsync();
+            await _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'"+ZahtevaniProizvod.Naziv.ToUpper() +"', Kategorija:'"+ZahtevaniProizvod.Kategorija.ToUpper() +"', Opis:'"+ZahtevaniProizvod.Opis+"',Proizvodjac:'"+ZahtevaniProizvod.Proizvodjac+"',Slika:'"+ZahtevaniProizvod.Slika+"'})").ExecuteWithoutResultsAsync();
 
-            var proizvod = _context.GraphClient.Cypher.Match("(n:Proizvod { Naziv:'" + ZahtevaniProizvod.Naziv + "', Proizvodjac:'" + ZahtevaniProizvod.Proizvodjac + "', Kategorija:'" + ZahtevaniProizvod.Kategorija + "' })").Return(n => n.As<Node<string>>());
+            var proizvod = _context.GraphClient.Cypher.Match("(n:Proizvod { Naziv:'" + ZahtevaniProizvod.Naziv.ToUpper() + "', Proizvodjac:'" + ZahtevaniProizvod.Proizvodjac + "', Kategorija:'" + ZahtevaniProizvod.Kategorija.ToUpper() + "' })").Return(n => n.As<Node<string>>());
             var rez = proizvod.Results.Single();
             string id = rez.Reference.Id.ToString();
             ZahtevaniProizvod.ID = id;
 
-            await _context.GraphClient.Cypher.Match("(n:Proizvod { Naziv:'" + ZahtevaniProizvod.Naziv + "', Proizvodjac:'" + ZahtevaniProizvod.Proizvodjac + "',Opis:'" + ZahtevaniProizvod.Opis + "' })").Set("n.ID =" +id).ExecuteWithoutResultsAsync();
+            await _context.GraphClient.Cypher.Match("(n:Proizvod { Naziv:'" + ZahtevaniProizvod.Naziv.ToUpper() + "', Proizvodjac:'" + ZahtevaniProizvod.Proizvodjac + "', Kategorija:'" + ZahtevaniProizvod.Kategorija.ToUpper() + "' })").Set("n.ID =" +id).ExecuteWithoutResultsAsync();
 
             foreach (Lokacija l in Lokacije)
             {

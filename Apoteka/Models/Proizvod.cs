@@ -11,7 +11,6 @@ namespace Apoteka.Models
         public string Naziv { get; set; }
         public string Proizvodjac { get; set; }
         public string Kategorija{ get; set; }
-        public double Cena { get; set; }
         public string Opis { get; set; }
         public string Slika { get; set; }
     }

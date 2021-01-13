@@ -1,20 +1,38 @@
 ﻿@page
 @model Apoteka.Pages.ProfilApotekeModel
 @{
-    var photoPath = "~/images/" + (Model.Apoteka.Slika ?? "Logo.png");
+    var photoPath = "~/images/Logo.png";
+    @if (Model.Apoteka.Slika != "")
+    {
+        photoPath = "~/images/" + Model.Apoteka.Slika;
+    }
 }
-<link href="~/css/ProfilApoteke.css" rel="stylesheet" />
-<div class="row">
-    <div class="col-md-4">
-        <div class="text-center">
-            <img src="@photoPath" class="avatar img-circle" alt="avatar" asp-append-version="true" style="border-radius: 50%; width: 250px; height:250px; margin-bottom:25px">
+@inject SignInManager<Korisnik> SignInManager
+@inject UserManager<Korisnik> UserManager
 
-            <button type="button" class="btn btn-outline-success" id="DodajProizvodbtn" data-toggle="modal" data-target="#dodajProizvod">Dodaj proizvod</button>
-            <button type="button" class="btn btn-outline-success" id="Izmenibtn">Izmeni informacije i cene proizvoda</button>
-            <button type="submit" class="btn btn-outline-success" id="Uklonibtn" asp-page-handler="UkloniApoteku">Ukloni apoteku</button>
-            <button type="button" class="btn btn-outline-success" id="ZahtevajProizvodbtn" data-toggle="modal" data-target="#zahtevajProizvod">Zahtevaj novi proizvod</button>
-        </div> 
-    </div>
+
+<link href="~/css/ProfilApoteke.css" rel="stylesheet" />
+
+<div class="row">
+    <form method="post">
+        <div class="col-md-4">
+            <div class="text-center">
+                <img src="@photoPath" class="avatar img-circle" alt="avatar" asp-append-version="true" style="border-radius: 50%; width: 250px; height:250px; margin-bottom:25px">
+
+
+                @if (UserManager.GetUserName(User) == Model.Vlasnik.UserName)
+                {
+                    <label hidden asp-for="Apoteka.ApotekaID"></label>
+                    <input hidden asp-for="Apoteka.ApotekaID" class="form-control" />
+                    <button type="button" class="btn btn-outline-success" id="DodajProizvodbtn" data-toggle="modal" data-target="#dodajProizvod">Dodaj proizvod</button>
+                    <button type="button" class="btn btn-outline-success" id="Izmenibtn">Izmeni informacije i cene proizvoda</button>
+                    <button type="submit" class="btn btn-outline-success" onclick="otkazi()" id="Uklonibtn" asp-page-handler="UkloniApoteku">Ukloni apoteku</button>
+                    <button type="button" class="btn btn-outline-success" id="ZahtevajProizvodbtn" data-toggle="modal" data-target="#zahtevajProizvod">Zahtevaj novi proizvod</button>
+                }
+
+            </div>
+        </div>
+    </form>
     <div class="col-md-8">
         <form method="post" enctype="multipart/form-data">
             <h4>Profil apoteke</h4>
@@ -43,7 +61,7 @@
                 <label asp-for="Apoteka.BrojTelefona">Broj telefona: </label>
                 <input asp-for="Apoteka.BrojTelefona" class="form-control izmena" disabled />
             </div>
-            <div class="form-group">
+            <div class="form-group sacuvaj" hidden>
                 <label>Vas novi logo: </label>
                 <div class="custom-file" style="text-align:left; white-space:nowrap;">
                     <input asp-for="Photo" class="custom-file-input form-control" />
@@ -76,7 +94,7 @@
                                     <td><input type="text" id="cc_@a" class="form-control" asp-for="@Model.Lokacije[i].UlicaBr" disabled></td>
                                     <td><input type="text" id="dd_@a" class="form-control" asp-for="@Model.Lokacije[i].BrojTelefona" disabled></td>
                                     <input type="text" id="aa_@a" class="form-control" asp-for="@Model.Lokacije[i].ID" hidden>
-                                    <td> <button type="submit" onclick="obrisi(@a,this)" asp-route-idlok="@Model.Lokacije[i].ID" asp-page-handler="UkloniLokaciju" class="btn btn-outline-danger"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
+                                    <td> <button type="submit" onclick="obrisi(@a,this)" asp-route-idlok="@Model.Lokacije[i].ID" asp-page-handler="UkloniLokaciju" class="btn btn-outline-danger sacuvaj" hidden><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
                                 </tr>
                             }
 
@@ -109,8 +127,9 @@
                                             @Html.CheckBoxFor(m => m.Lokacije[i].Sel)
                                             <label for="@r">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
                                         </div>
-                                        <div class="col-6"><input class="form-control cena" type="number" id="@i" asp-for="@Model.Cene" placeholder="Cena" />
-                                        din.
+                                        <div class="col-6">
+                                            <input class="form-control cena" type="number" id="@i" asp-for="@Model.Cene" placeholder="Cena" />
+                                            din.
                                         </div>
                                     </div>
                                 }
@@ -123,8 +142,8 @@
                     </div>
                 </div>
             </div>
-			
-			<!-- Modal box za dodavanje zauzetih termina -->
+
+            <!-- Modal box za dodavanje zauzetih termina -->
             <div class="modal fade" id="zahtevajProizvod" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -154,8 +173,8 @@
                             <div class="form-group">
                                 <label>Fotografija proizvoda: </label>
                                 <div class="custom-file" style="text-align:left; white-space:nowrap;">
-                                    <input asp-for="PhotoProizvod" class="custom-file-input1 form-control" />
-                                    <label class="custom-file-label1">Izaberite fotografiju...</label>
+                                    <input asp-for="PhotoProizvod" class="custom-file-input cusfileinput form-control" />
+                                    <label class="custom-file-label cusfilelabel">Izaberite fotografiju...</label>
                                 </div>
                             </div>
                             @for (var i = 0; i < @Model.Lokacije.Count; i++)
@@ -185,50 +204,53 @@
                 <label>Proizvodi po lokacijama: </label>
                 @for (var i = 0; i < Model.MojeLokacije.Count; i++)
                 {
+
                     <button type="button" class="accordion">@Model.MojeLokacije[i].Grad - @Model.MojeLokacije[i].UlicaBr - @Model.MojeLokacije[i].BrojTelefona</button>
                     <div class="panel">
                         <table style="margin-bottom: 10px;">
-                        <thead style="color: #8c8c8c;">
-                        <th>Naziv</th>
-                        <th>Kategorija</th>
-                        <th>Proizvodjac</th>
-                        <th>Cena(din.)</th>
-                        </thead>
-                        <tbody id="tbody">
-                        @for (var j = 0; j < Model.Imas.Count; j++)
-                        {
-                            @if (Model.MojeLokacije[i] == Model.Imas[j].LokacijaVeza)
-                            {
-                                var a = i + 10;
-                                <tr>
-                                    <td>
-                                    <input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Naziv" disabled>
-                                    </td>
-                                    <td>
-                                    <input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Kategorija" disabled>
-                                    </td>
-                                    <td>
-                                    <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Proizvodjac" disabled>
-                                    </td>
-                                    <td>
-                                    <input type="text" id="e_@a" class="form-control izmena" asp-for="@Model.Imas[j].Cena" disabled>
-                                    </td>
-                                    <td>
-                                    <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>
-                                    </td>
-                                    <td>
-                                    <button type="submit" id="g_@a" asp-route-idVeza="@Model.Imas[j].VezaID" asp-page-handler="UkloniVezu" class="btn btn-outline-danger"><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        </tbody>
-                    </table>
+                            <thead style="color: #8c8c8c;">
+                            <th>Naziv</th>
+                            <th>Kategorija</th>
+                            <th>Proizvodjac</th>
+                            <th>Cena(din.)</th>
+                            </thead>
+                            <tbody id="tbody">
+                                @for (var j = 0; j < Model.Imas.Count; j++)
+                                {
+                                    @if (Model.MojeLokacije[i] == Model.Imas[j].LokacijaVeza)
+                                    {
+                                        var a = i + 10;
+                                        <tr>
+                                            <td>
+                                                <input type="text" id="a_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Naziv" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="b_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Kategorija" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].ProizvodVeza.Proizvodjac" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="e_@a" class="form-control izmena" asp-for="@Model.Imas[j].Cena" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>
+                                            </td>
+                                            <td>
+                                                <button type="submit" onclick="otkazi()" id="g_@a" asp-route-idVeza="@Model.Imas[j].VezaID" asp-page-handler="UkloniVezu" class="btn btn-outline-danger sacuvaj" hidden><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
                     </div>
+
                 }
             }
 
-            <button type="submit" class="btn btn-success sacuvaj" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button>
+
+            <button type="submit" onclick="otkazi()" class="btn btn-success sacuvaj" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button>
         </form>
 
     </div>
@@ -272,9 +294,9 @@
             $(this).next('.custom-file-label').html(fileName);
         });
 
-        $('.custom-file-input1').on("change", function () {
+        $('.cusfileinput').on("change", function () {
             var fileName = $(this).val().split("\\").pop();
-            $(this).next('.custom-file-label1').html(fileName);
+            $(this).next('.cusfilelabel').html(fileName);
         });
 
 
@@ -291,16 +313,16 @@
         var tbl = "";
         tbl += "<tr>" +
             "<td>" +
-            "<input type='text' id='" + brLok + "' class=" + " form-control" + " name='NoviGradovi' />" +
+            "<input type='text' id='bb_" + brLok + "' class=" + " form-control" + " name='NoviGradovi' />" +
             "</td>" +
             "<td>" +
-            "<input type='text' id='a_" + brLok + "' class=" + " form-control" + " name='NoveAdrese'/>" +
+            "<input type='text' id='cc_" + brLok + "' class=" + " form-control" + " name='NoveAdrese'/>" +
             "</td>" +
             "<td>" +
-            "<input type='text' id='b_" + brLok + "' class=" + " form-control" + " name='NoviBrojevi'/>" +
+            "<input type='text' id='dd_" + brLok + "' class=" + " form-control" + " name='NoviBrojevi'/>" +
             "</td>" +
             " <td>" +
-            " <button type='button' onclick='obrisi(" + brLok + ",this)' class='btn btn-outline-dark' style='margin-top: 5px;'><ion-icon name='trash-outline' style='vertical-align:-2px;'></ion-icon></button>" +
+            " <button type='button' onclick='obrisi(" + brLok + ",this)' class='btn btn-outline-danger' ><ion-icon name='trash-outline' style='vertical-align:-2px;'></ion-icon></button>" +
             "</td>" +
             "</tr>";
 
@@ -317,10 +339,9 @@
         var broj = document.getElementById('broj');
         broj.value = brLok;
 
-
-        var grad = document.getElementById(idLok);
-        var adresa = document.getElementById("a_" + idLok);
-        var broj = document.getElementById("b_" + idLok);
+        var grad = document.getElementById("bb_" + idLok);
+        var adresa = document.getElementById("cc_" + idLok);
+        var broj = document.getElementById("dd_" + idLok);
 
         grad.setAttribute('id', "obrisano");
         adresa.setAttribute('id', "obrisan");

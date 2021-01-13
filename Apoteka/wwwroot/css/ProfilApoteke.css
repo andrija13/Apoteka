@@ -1,5 +1,8 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
 
+.row{
+    flex-wrap: nowrap;
+}
 .col-md-8 h4{
     font-family: 'Roboto', sans-serif;
     text-align: left;

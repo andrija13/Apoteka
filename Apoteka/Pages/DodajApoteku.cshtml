@@ -2,90 +2,98 @@
 @model Apoteka.Pages.DodajApotekuModel
 @{
 }
+@inject SignInManager<Korisnik> SignInManager
+@inject UserManager<Korisnik> UserManager
+
 <link rel="stylesheet" href="~/css/DodajApoteku.css">
 
-<div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-        <form method="post" enctype="multipart/form-data">
-            <h4>Dodaj Apoteku</h4>
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label hidden asp-for="Apoteka.ApotekaID"></label>
-                <input hidden asp-for="Apoteka.ApotekaID" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Apoteka.Naziv">Naziv: </label>
-                <input asp-for="Apoteka.Naziv" class="form-control" placeholder="Unesite naziv apoteke" autocomplete="off"/>
-            </div>
-            <div class="form-group">
-                <label asp-for="Apoteka.Email">Email: </label>
-                <input asp-for="Apoteka.Email" class="form-control" placeholder="Unesite email adresu" autocomplete="off" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Apoteka.Direktor">Direktor: </label>
-                <input asp-for="Apoteka.Direktor" class="form-control" placeholder="Unesite ime i prezime direktora apoteke" autocomplete="off" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Apoteka.BrojTelefona">Broj telefona: </label>
-                <input asp-for="Apoteka.BrojTelefona" class="form-control" placeholder="Unesite broj telefona" autocomplete="off" />
-            </div>
-
-            <div class="form-group">
-                <label>Vas logo: </label>
-                <div class="custom-file" style="text-align:left; white-space:nowrap;">
-                    <input asp-for="Photo" class="custom-file-input form-control" />
-                    <label class="custom-file-label">Izaberite fotografiju...</label>
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <form method="post" enctype="multipart/form-data">
+                <h4>Dodaj Apoteku</h4>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label hidden asp-for="Apoteka.ApotekaID"></label>
+                    <input hidden asp-for="Apoteka.ApotekaID" class="form-control" />
                 </div>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Apoteka.Naziv">Naziv: </label>
+                    <input asp-for="Apoteka.Naziv" class="form-control" placeholder="Unesite naziv apoteke" autocomplete="off" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Apoteka.Email">Email: </label>
+                    <input asp-for="Apoteka.Email" class="form-control" placeholder="Unesite email adresu" autocomplete="off" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Apoteka.Direktor">Direktor: </label>
+                    <input asp-for="Apoteka.Direktor" class="form-control" placeholder="Unesite ime i prezime direktora apoteke" autocomplete="off" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Apoteka.BrojTelefona">Broj telefona: </label>
+                    <input asp-for="Apoteka.BrojTelefona" class="form-control" placeholder="Unesite broj telefona" autocomplete="off" />
+                </div>
 
-            <div class="form-group">
-                <label for="exampleFormControlInput1">Broj lokacija:</label>
-                <input type="number" min="1" class="form-control bend" id="brclanova" placeholder="Unesite broj lokacija">
-                <button type="button" class="btn btn-outline-success" value="CREATE" id="btnNoOfRec" style="margin-top: 20px;">Unesi lokacije</button>
-            </div>
-            <div>
-            <div id="LokacijeDiv">
+                <div class="form-group">
+                    <label>Vas logo: </label>
+                    <div class="custom-file" style="text-align:left; white-space:nowrap;">
+                        <input asp-for="Photo" class="custom-file-input form-control" />
+                        <label class="custom-file-label">Izaberite fotografiju...</label>
+                    </div>
+                </div>
 
-            </div>
-            <div class="dodaj">
-                <button type="submit" asp-page-handler="Dodaj" class="btn btn-success">Dodaj</button>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Broj lokacija:</label>
+                    <input type="number" min="1" class="form-control bend" id="brclanova" placeholder="Unesite broj lokacija">
+                    <button type="button" class="btn btn-outline-success" value="CREATE" id="btnNoOfRec" style="margin-top: 20px;">Unesi lokacije</button>
+                </div>
+                <div>
+                    <div id="LokacijeDiv">
+
+                    </div>
+                    <div class="dodaj">
+                        <button type="submit" asp-page-handler="Dodaj" class="btn btn-success">Dodaj</button>
+                    </div>
+            </form>
+        </div>
+        <div class="col-md-3"></div>
     </div>
-    <div class="col-md-3"></div>
-</div>
+}
+else
+{
+<div> Morate biti prijavljeni! <a  asp-area="Identity" asp-page="/Account/Login">Uloguj se!</a></div>
+}
+    <script src="~/temp/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnNoOfRec").click(function () {
+                $('#LokacijeDiv').empty();
+                var NoOfRec = $('#brclanova').val();
 
+                if (NoOfRec > 0) {
+                    createControl(NoOfRec);
+                }
+            });
 
-<script src="~/temp/jquery-3.4.1.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#btnNoOfRec").click(function () {
-            $('#LokacijeDiv').empty();
-            var NoOfRec = $('#brclanova').val();
+            function createControl(NoOfRec) {
+                var tbl = "";
 
-            if (NoOfRec > 0) {
-                createControl(NoOfRec);
+                tbl = "<table>" + "<tr>" + "<th>Grad</th>" + "<th>Ulica i broj</th>" + "<th>Broj telefona</th>" + "</tr>";
+                for (var i = 0; i < NoOfRec; i++) {
+                    tbl += "<tr>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].Grad' autocomplete='off' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].UlicaBr' autocomplete='off' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].BrojTelefona' autocomplete='off' />" + "</td>" + "</tr>";
+                }
+                tbl += "</table>";
+                $('#LokacijeDiv').append(tbl);
             }
         });
-
-        function createControl(NoOfRec) {
-            var tbl = "";
-
-            tbl = "<table>" + "<tr>" + "<th>Grad</th>" + "<th>Ulica i broj</th>" + "<th>Broj telefona</th>" + "</tr>";
-            for (var i = 0; i < NoOfRec; i++) {
-                tbl += "<tr>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].Grad' autocomplete='off' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].UlicaBr' autocomplete='off' />" + "</td>" + "<td>" + "<input type='text' name='Lokacije[" + i + "].BrojTelefona' autocomplete='off' />" + "</td>" + "</tr>";
-            }
-            tbl += "</table>";
-            $('#LokacijeDiv').append(tbl);
-        }
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('.custom-file-input').on("change", function () {
-            var fileName = $(this).val().split("\\").pop();
-            $(this).next('.custom-file-label').html(fileName);
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
         });
-    });
-</script>
+    </script>
