@@ -14,9 +14,9 @@
 <link href="~/css/ProfilApoteke.css" rel="stylesheet" />
 
 <div class="row">
-    <form method="post">
         <div class="col-md-4">
             <div class="text-center">
+                <form method="post">
                 <img src="@photoPath" class="avatar img-circle" alt="avatar" asp-append-version="true" style="border-radius: 50%; width: 250px; height:250px; margin-bottom:25px">
 
 
@@ -29,10 +29,9 @@
                     <button type="submit" class="btn btn-outline-success" onclick="otkazi()" id="Uklonibtn" asp-page-handler="UkloniApoteku">Ukloni apoteku</button>
                     <button type="button" class="btn btn-outline-success" id="ZahtevajProizvodbtn" data-toggle="modal" data-target="#zahtevajProizvod">Zahtevaj novi proizvod</button>
                 }
-
+                </form>
             </div>
         </div>
-    </form>
     <div class="col-md-8">
         <form method="post" enctype="multipart/form-data">
             <h4>Profil apoteke</h4>
@@ -129,7 +128,7 @@
                                         </div>
                                         <div class="col-6">
                                             <input class="form-control cena" type="number" id="@i" asp-for="@Model.Cene" placeholder="Cena" />
-                                            din.
+                                            <span style="color: #888888;">din.</span>
                                         </div>
                                     </div>
                                 }
@@ -167,7 +166,7 @@
                                 <input asp-for="ZahtevaniProizvod.Proizvodjac" class="form-control zahtev1" required />
                             </div>
                             <div class="form-group">
-                                <label asp-for="ZahtevaniProizvod.Opis">Opis </label>
+                                <label asp-for="ZahtevaniProizvod.Opis">Opis: </label>
                                 <input asp-for="ZahtevaniProizvod.Opis" class="form-control zahtev1" required />
                             </div>
                             <div class="form-group">
@@ -180,20 +179,24 @@
                             @for (var i = 0; i < @Model.Lokacije.Count; i++)
                             {
                                 var r = "Lokacije_" + i + "__Sel";
-                                <div>
-                                    <td class="js-export-checkbox">
-                                        @Html.CheckBoxFor(m => m.Lokacije[i].Sel)
-                                    </td>
-                                    <label for="@r">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
-                                    <br />
-                                    <label> Cena: </label> <input class="form-control" type="number" id="ml_@i" asp-for="@Model.Cene" />
+                                <div class="row lokacije">
+                                    <div class="col-6 checkbox">
+                                        <td class="js-export-checkbox">
+                                            @Html.CheckBoxFor(m => m.Lokacije[i].Sel)
+                                        </td>
+                                        <label for="@r">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input class="form-control cena" type="number" id="ml_@i" asp-for="@Model.Cene" placeholder="Cena"/>
+                                        <span style="color: #888888;">din.</span>
+                                    </div>
                                 </div>
                             }
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" onclick="otkazi()" class="btn btn-secondary" data-dismiss="modal">Poništi</button>
-                            <button type="submit" onclick="promeni1()" asp-page-handler="ZahtevajProizvod" class="btn btn-primary">Potvrdi</button>
+                            <button type="button" onclick="otkazi()" class="btn btn-outline-dark" data-dismiss="modal">Poništi</button>
+                            <button type="submit" onclick="promeni1()" asp-page-handler="ZahtevajProizvod" class="btn btn-success">Potvrdi</button>
                         </div>
                     </div>
                 </div>
@@ -250,7 +253,7 @@
             }
 
 
-            <button type="submit" onclick="otkazi()" class="btn btn-success sacuvaj" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button>
+            <button type="submit" onclick="otkazi()" class="btn btn-success sacuvaj dugme" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button>
         </form>
 
     </div>

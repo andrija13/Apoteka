@@ -76,7 +76,7 @@ namespace Apoteka.Pages
             var rezul = proizvod.Results;
             Proizvodi = rezul.Select(node => JsonConvert.DeserializeObject<Proizvod>(node.Data)).ToList();
 
-            if (Proizvodi.Count == 0)
+            if (Proizvodi.Count==0)
             {
                 _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'IBUPROFEN',Kategorija:'IBUPROFEN', Opis:'film tabl. 30x600mg',Proizvodjac:'Hemofarm',Slika:'ibuprofen-400-mg-67.png'})").ExecuteWithoutResults();
                 _context.GraphClient.Cypher.Create("(n:Proizvod {ID:'' ,Naziv:'BRUFEN',Kategorija:'IBUPROFEN', Opis:'film tabl. 30x400mg',Proizvodjac:'Hemofarm',Slika:'brufen1.jpg'})").ExecuteWithoutResults();
@@ -92,17 +92,19 @@ namespace Apoteka.Pages
             }
 
             Ids = rezul.Select(node => JsonConvert.DeserializeObject<string>(node.Reference.Id.ToString())).ToList();
-            for (int i = 0; i < Proizvodi.Count; i++)
+            for (int i=0;i<Proizvodi.Count;i++)
             {
                 Proizvodi[i].ID = Ids[i];
-                await _context.GraphClient.Cypher.Match("(n:Proizvod { Naziv:'" + Proizvodi[i].Naziv + "', Proizvodjac:'" + Proizvodi[i].Proizvodjac + "',Opis:'" + Proizvodi[i].Opis + "' })").Set("n.ID = " + Ids[i]).ExecuteWithoutResultsAsync();
+                await _context.GraphClient.Cypher.Match("(n:Proizvod { Naziv:'" + Proizvodi[i].Naziv + "', Proizvodjac:'" + Proizvodi[i].Proizvodjac + "',Opis:'"+Proizvodi[i].Opis+"' })").Set("n.ID = " + Ids[i]).ExecuteWithoutResultsAsync();
 
             }
+
 
             List<Lokacija> SveLokacije = new List<Lokacija>();
             var lokacija = _context.GraphClient.Cypher.Match("(l:Lokacija)-[:IMA]->(p:Proizvod)").Return(l => l.As<Node<string>>());
             var rezultat = lokacija.Results.Distinct();
             SveLokacije = rezultat.Select(node => JsonConvert.DeserializeObject<Lokacija>(node.Data)).ToList();
+
 
             //PRETRAGA
 
@@ -110,11 +112,11 @@ namespace Apoteka.Pages
             foreach (Lokacija lok in SveLokacije)
             {
                 List<Proizvod> pomProizvod = new List<Proizvod>();
-                var imaProizvode = _context.GraphClient.Cypher.Match("(l:Lokacija { ID: " + lok.ID + "})-[:IMA]->(p:Proizvod)").Return(p => p.As<Node<string>>());
+                var imaProizvode = _context.GraphClient.Cypher.Match("(l:Lokacija { ID: "+lok.ID+"})-[:IMA]->(p:Proizvod)").Return(p => p.As<Node<string>>());
                 var provera = imaProizvode.Results;
                 pomProizvod = provera.Select(node => JsonConvert.DeserializeObject<Proizvod>(node.Data)).ToList();
 
-                var qapoteka = _context.GraphClient.Cypher.Match("(l:Lokacija { ID: " + lok.ID + "})<-[:SE_NALAZI_U]->(a:Apoteka)").Return(a => a.As<Node<string>>());
+                var qapoteka = _context.GraphClient.Cypher.Match("(l:Lokacija { ID: " + lok.ID + "})<-[:SE_NALAZI_U]-(a:Apoteka)").Return(a => a.As<Node<string>>());
                 var rez = qapoteka.Results.Single();
                 var apoteka = JsonConvert.DeserializeObject<ApotekaModel>(rez.Data);
 
@@ -135,9 +137,7 @@ namespace Apoteka.Pages
                 }
             }
 
-            if (Ima.Count > 0)
-            {
-
+        if (Ima.Count > 0){
                 query = Ima.Select(x => x).OrderBy(x => x.Cena);
 
                 if (!string.IsNullOrEmpty(SortirajPoFilter))
@@ -171,7 +171,7 @@ namespace Apoteka.Pages
                 {
                     if (SortirajPoFilter == "Najjeftinije")
                     {
-                        query = Ima.Select(x => x).Where(x => x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderBy(x => x.Cena);
+                        query = Ima.Select(x => x).Where(x=>x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderBy(x => x.Cena);
                     }
                     if (SortirajPoFilter == "Najskuplje")
                     {
@@ -205,10 +205,8 @@ namespace Apoteka.Pages
 
                 query = LinqHelper.DistinctBy(query, x => new { x.ProizvodVeza.Naziv, x.ProizvodVeza.Proizvodjac });
                 PretragaIma = query.ToList();
-
             }
         }
-
     }
 
     public static class LinqHelper

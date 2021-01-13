@@ -1,55 +1,156 @@
 ﻿@page
 @model IndexModel
 @using Models;
+@using Microsoft.AspNetCore.Identity
+@using Apoteka.Models
+
+@inject SignInManager<Korisnik> SignInManager
+@inject UserManager<Korisnik> UserManager
+@inject RoleManager<Neo4j.AspNetCore.Identity.IdentityRole> _roleManager
 @{
     ViewData["Title"] = "Home page";
 }
-
-<form id="formID" method="get">
-    <h1 style="color: #cacaca;font-weight: 100;font-family: Roboto;">Nadji Lek - Pretraga</h1>
-    <hr>
-    <div class="filter" style="display: flex;">
-
-        <input type="text" class="form-control" asp-for="@Model.FilterNaziv" placeholder="Unesite naziv leka"/>
-
-        <select class="form-control"  asp-for="@Model.GradFilter" asp-items="@Model.GradoviFilter" id="Grad">
-            <option value="" selected >Izaberite grad</option>
-        </select>
-
-        <select class="form-control"  asp-for="@Model.SortirajPoFilter" asp-items="@Model.SortirajPo" id="SortirajPo">
-            <option value="" selected>Sortiraj po</option>
-        </select>
-
-        <button class="btn btn-outline-primary search" type="submit"><ion-icon name="search-outline" style="vertical-align: -2px;"></ion-icon> Pretraži</button>
-    </div>
-    <br />
-
-    @if (Model.PretragaIma.Count > 0)
-    {
-    <div class="row lista-oglasa">
-       @foreach (var proizvod in @Model.PretragaIma)
-       {
-           var photoPath = "~/images/Logo.png";
-           @if (proizvod.ProizvodVeza.Slika != "")
-           {
-               photoPath = "~/images/" + proizvod.ProizvodVeza.Slika;
-           }
-            <div class="col-lg-4">
-                <div class="card">
-                    <a class="text-dark" asp-route-Id="@proizvod.ProizvodVeza.ID" asp-page="/ProfilProizvoda"> <img class="card-img-top" src="@photoPath" alt="Card image cap" asp-append-version="true" /><h5 class="card-header">@proizvod.ProizvodVeza.Naziv</h5></a>
-                    <div class="card-body">
-                        <h5 class="card-title">@proizvod.ProizvodVeza.Kategorija</h5>
-                        <p class="card-text desc">Opis: @proizvod.ProizvodVeza.Opis</p>
-                        <p class="card-text">Proizvodjac: @proizvod.ProizvodVeza.Proizvodjac</p>
-                        <p class="card-text">U apoteci @proizvod.ApootekaVeza.Naziv - @proizvod.LokacijaVeza.Grad po ceni od @proizvod.Cena din.</p>
-
-                    </div>
-                    <a asp-route-Id="@proizvod.ProizvodVeza.ID" asp-page="/ProfilProizvoda">
-                        <button class="more-btn" type="button">Više <ion-icon name="chevron-forward-circle-outline" style="vertical-align: text-bottom; font-size: 18px;"></ion-icon></button>
-                    </a>
+@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Nadji Lek</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/HomePage.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Nadji Lek</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a id="manage" class="nav-link" asp-page="/SveApoteke">Sve Apoteke</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="manage" class="nav-link" asp-page="/DodajApoteku" title="Manage">Dodaj Apoteku</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="manage" class="nav-link btn register" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><ion-icon style="font-size: 18px; vertical-align: -3px;" name="person-circle-outline"></ion-icon> Moj Profil</a>
+                            </li>
+                            <li class="nav-item">
+                                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                                    <button id="logout" type="submit" class="nav-link btn logout">Odjavi se</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a id="manage" class="nav-link" asp-page="/SveApoteke">Sve Apoteke</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn register" id="register" asp-area="Identity" asp-page="/Account/Register">Registruj se</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn login" id="login" asp-area="Identity" asp-page="/Account/Login">Prijavi se</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Index">Pocetna</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Privacy">O nama</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-       }
+        </nav>
+    </header>
+    <div class="container">
+        <div class="row hero">
+            <div class="col-md-6 wlcm-section">
+                <h1>Dobro došli!</h1>
+                <h5>Vaše mesto za sigurnu online<br> kupovinu.</h5><br>
+                <a  href="#search"><button class="btn">Istraži</button></a>
+            </div>
+            <div class="col-md-6 img-section">
+                <img src="~/images/hero.svg" alt="Image">
+            </div>
+        </div>
     </div>
-    }
-</form>
+    <div class="container-fluid catalog">
+        <form class="row" id="formID" method="get">
+            <div id="search" class="container search-box">
+                <div class="filter" style="display:flex;">
+                    <input type="text" class="form-control" asp-for="@Model.FilterNaziv" placeholder="Unesite naziv leka"/>
+                    <select class="form-control"  asp-for="@Model.GradFilter" asp-items="@Model.GradoviFilter" id="Grad">
+                        <option value="" selected >Izaberite grad</option>
+                    </select>
+                    <select class="form-control"  asp-for="@Model.SortirajPoFilter" asp-items="@Model.SortirajPo" id="SortirajPo">
+                        <option value="" selected>Sortiraj po</option>
+                    </select>
+                    <button class="btn btn-outline-primary search" type="submit"><ion-icon name="search-outline" style="vertical-align: -2px;"></ion-icon> Pretraži</button>
+                </div>
+            </div>
+            @if (Model.PretragaIma.Count > 0)
+                {
+                <div class="container">
+                    <div class="row lista-oglasa">
+                    @foreach (var proizvod in @Model.PretragaIma)
+                    {
+                        var photoPath = "~/images/Logo.png";
+                        @if (proizvod.ProizvodVeza.Slika != "")
+                        {
+                            photoPath = "~/images/" + proizvod.ProizvodVeza.Slika;
+                        }
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <a class="text-dark" asp-route-Id="@proizvod.ProizvodVeza.ID" asp-page="/ProfilProizvoda"> <img class="card-img-top" src="@photoPath" alt="Card image cap" asp-append-version="true" /><h5 class="card-header">@proizvod.ProizvodVeza.Naziv</h5></a>
+                                    <div class="card-body">
+                                        <h5 class="card-title">@proizvod.ProizvodVeza.Kategorija</h5>
+                                        <p class="card-text desc">Opis: @proizvod.ProizvodVeza.Opis</p>
+                                        <p class="card-text">Proizvodjac: @proizvod.ProizvodVeza.Proizvodjac</p>
+                                        <p class="card-text">U apoteci @proizvod.ApootekaVeza.Naziv - @proizvod.LokacijaVeza.Grad po ceni od @proizvod.Cena din.</p>
+
+                                    </div>
+                                    <a class="more-btn-link" asp-route-Id="@proizvod.ProizvodVeza.ID" asp-page="/ProfilProizvoda">
+                                        <button class="btn more-btn" type="button">Više <ion-icon name="chevron-forward-circle-outline" style="vertical-align: -3px; font-size: 18px;"></ion-icon></button>
+                                    </a>
+                                </div>
+                            </div>
+                    }
+                    </div>
+                </div>
+            }else{
+                <div class="container">
+                    <div class="row bez-oglasa text-muted">
+                        <h4>Trenutno nema proizvoda za datu pretragu.</h4>
+                        <div class="col-4"><img src="~/images/search.svg" alt="Not found"></div>
+                    </div>
+                </div>
+            }
+            </form>
+    </div>
+
+    <div class="container-fluid footer">
+        <div class="row">
+            <p>Sva prava zadržana</p><br>
+            <p>&copy; 2021 - Nadji Lek </p>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+</body>
+</html>

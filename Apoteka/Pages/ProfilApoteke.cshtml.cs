@@ -183,6 +183,11 @@ namespace Apoteka.Pages
         }
         public async Task<IActionResult> OnPostUkloniApotekuAsync()
         {
+            var lokacija = _context.GraphClient.Cypher.Match("(n:Apoteka {ApotekaID:" + Apoteka.ApotekaID + "})-[:SE_NALAZI_U]->(l: Lokacija)").Return(l => l.As<Node<string>>());
+            var rezultat = lokacija.Results;
+
+            Lokacije = rezultat.Select(node => JsonConvert.DeserializeObject<Lokacija>(node.Data)).ToList();
+
             foreach (Lokacija lok in Lokacije)
             {
                 if (lok != null)

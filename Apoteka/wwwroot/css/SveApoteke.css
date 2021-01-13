@@ -29,6 +29,7 @@
     z-index: 5;
     position: relative;
     border: 3px solid #fff;
+    background: rgb(247, 247, 247);
 }
 .card-header{
     padding-top: 25px;
@@ -44,4 +45,14 @@
 .card-text{
     color: #a7a7a7;
     margin: 0;
+}
+.bez-apoteka{
+    padding-top: 50px;
+    display: grid;
+    place-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+.bez-apoteka img{
+    padding-top: 50px;
+    width: 75%;
 }

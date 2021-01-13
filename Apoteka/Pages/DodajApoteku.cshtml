@@ -63,7 +63,15 @@
 }
 else
 {
-<div> Morate biti prijavljeni! <a  asp-area="Identity" asp-page="/Account/Login">Uloguj se!</a></div>
+<div class="row logcheck text-muted"> 
+    <div class="col-6">
+        <h4>Morate biti prijavljeni!</h4>
+        <p><a asp-area="Identity" asp-page="/Account/Login">Uloguj se!</a></p>
+    </div>
+    <div class="col-6">
+        <img src="~/images/login.svg" alt="Login">
+    </div>
+</div>
 }
     <script src="~/temp/jquery-3.4.1.min.js"></script>
     <script type="text/javascript">

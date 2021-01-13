@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap');
+
+html{
+    scroll-behavior: smooth;
+}  
+body{
+    background: #1266d8;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+.navbar{
+    background: #1266d8 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.navbar-brand{
+    color: white !important;
+   font-weight: 600;
+}
+.nav-link{
+    color: white !important;
+    font-weight: 300;
+    margin-left: 30px !important;
+    font-size: 14px;
+}
+.nav-link:hover{
+    color: #70dea5 !important;
+}
+.nav-item .register{
+    border: 1px solid #0cbe62;
+    padding: 5px 15px 5px 15px !important;
+    color: white;
+    font-weight: 300;
+    transition: 0.2s;
+}
+.nav-item .register:hover{
+    background: #0cbe62;
+    color: white !important;
+}
+.nav-item .login{
+    background: #0cbe62;
+    padding: 5px 25px 5px 25px !important;
+    color: white;
+    font-weight: 300;
+    transition: 0.2s;
+}
+.nav-item .login:hover{
+    background: #04af57;
+    color: white !important;
+}
+.nav-item .logout{
+    background: #0cbe62;
+    padding: 5px 25px 5px 25px !important;
+    color: white;
+    font-weight: 300;
+    transition: 0.2s;
+}
+.nav-item .logout:hover{
+    background: #04af57;
+    color: white !important;
+}
+.hero{
+    height: 95vh;
+    color: white;
+    display: grid-inline;
+    place-items: center;
+    padding-bottom: 150px;
+}
+.wlcm-section h1{
+    font-weight: 500;
+    font-size: 48px;
+}
+.wlcm-section h5{
+    font-weight: 300;
+    padding-left: 25px;
+    font-size: 18px;
+    letter-spacing: 1.2px;
+}
+.wlcm-section button{
+    background: #70dea5;
+    padding: 5px 25px 5px 25px;
+    color: #1266d8;
+    margin-left: 25px;
+    font-weight: 300;
+    transition: 0.2s;
+}
+.wlcm-section button:hover{
+    background: none;
+    border: 1px solid #70dea5;
+    color: white;
+}
+.img-section img{
+    width: 100%;
+}
+
+.catalog{
+    background: #fff;
+}
+.search-box{
+    background: #fff;
+    -webkit-box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+    border-radius: 10px;
+    margin-top: -65px;
+    padding: 45px;
+}
+.search-box .form-control{
+    width: 25% !important;
+    margin-right: 10px;
+}
+.search-box .filter{
+    justify-content: center;
+}
+
+.lista-oglasa{
+    padding: 50px 0 50px 0;
+}
+.bez-oglasa{
+    padding: 50px 0 50px 0;
+    justify-content: center;
+}
+.bez-oglasa h4{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 25px;
+}
+.bez-oglasa img{
+    width: 100%;
+}
+.lista-oglasa .card{
+    border: none;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+}
+.card .card-img-top{
+    padding: 50px 50px 30px 50px;
+    height: 300px;
+}
+.card .card-header{
+    border: none;
+    background: none;
+    text-align: center;
+    font-weight: 600;
+}
+.card .card-body{
+    padding-top: 5px;
+}
+.card .card-text{
+    margin: 0;
+}
+.card .more-btn-link{
+    text-align: center;
+    padding: 15px 0 30px 0;
+}
+.card .more-btn{
+    background: #5fce95;
+    padding: 5px 25px 5px 25px;
+    color: white;
+    font-weight: 300;
+    transition: 0.2s;
+}
+.card .more-btn:hover{
+    background: none;
+    border: 1px solid #5fce95;
+    color: #5fce95;
+}
+
+.footer{
+    position: relative;
+    line-height: 1.5em;
+    background: #eeeeee;
+    color: white;
+    padding: 50px;
+}
+.footer p{
+    margin: 0;
+    font-weight: 500;
+    color: rgb(124, 124, 124);
+    width: 100%;
+    text-align: center;
+}

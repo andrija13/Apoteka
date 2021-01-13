@@ -9,7 +9,7 @@
 }
 <link href="~/css/ProfilProizvoda.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-5 proizvod">
+    <div class="col-md-6 proizvod">
         <form method="post">
             <div class="form-group">
                 <label hidden asp-for="@Model.Proizvod.ID"></label>
@@ -23,11 +23,11 @@
                 <h6>@Model.Proizvod.Kategorija</h6>
                 <div class="form-group">
                     <label asp-for="@Model.Proizvod.Opis">Opis: </label>
-                    <input type="text" asp-for="@Model.Proizvod.Opis" class="form-control" disabled />
+                    <input type="text" asp-for="@Model.Proizvod.Opis" class="form-control izmena" disabled />
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.Proizvod.Proizvodjac">Proizvodjac: </label>
-                    <input asp-for="@Model.Proizvod.Proizvodjac" class="form-control" disabled />
+                    <input asp-for="@Model.Proizvod.Proizvodjac" class="form-control izmena" disabled />
                 </div>
 
                 @for (var i = 0; i < Model.Apoteke.Count; i++)
@@ -58,7 +58,7 @@
                                                 <input type="text" id="c_@a" class="form-control" asp-for="@Model.Imas[j].LokacijaVeza.BrojTelefona" disabled>
                                             </td>
                                             <td>
-                                                <input type="text" id="e_@a" class="form-control izmena" asp-for="@Model.Imas[j].Cena" disabled>
+                                                <input type="text" id="e_@a" class="form-control" asp-for="@Model.Imas[j].Cena" disabled>
                                             </td>
                                             <td>
                                                 <input type="text" id="h_@a" class="form-control" asp-for="@Model.Imas[j].VezaID" hidden>

@@ -32,8 +32,8 @@
     font-family: 'Roboto';
     font-weight: 500;
 }
-.form-control:disabled{
-    background: #fff;
+.izmena{
+    background: #fff !important;
     border: none;
     border-bottom: 1px solid #a7a7a7;
     border-radius: 0;
@@ -41,8 +41,21 @@
     font-family: 'Roboto';
     font-weight: 300;
 }
-.izmena{
-    border-right: 1px solid #a7a7a7 !important;
+.opis-proizvoda .form-control:disabled{
+    background: rgb(249 249 249);
+    color: #adadad;
+    font-family: 'Roboto';
+    font-weight: 300;
+}
+table th{
+    font-family: 'Roboto';
+    font-weight: 100;
+    font-size: 16px;
+    color: #888888;
+}
+table td input{
+    border: 1px solid #cccccc !important;
+    border-radius: 5px !important;
 }
 /* Accordion */
 .accordion {
@@ -60,7 +73,7 @@
     background-color: #ccc;
 }
 .panel {
-    background-color: white;
+    /* background-color: white; */
     display:none;
     overflow: hidden;
 }

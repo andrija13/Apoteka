@@ -9,9 +9,16 @@
 
     @if (@Model.Apoteke.Count == 0)
     {
-        <a class="text-dark" asp-page="./DodajApoteku">
-            <h5 class="obavestenje"> <ion-icon name="add-circle-outline"></ion-icon> Trenutno nema apoteka! Napravite prvi!</h5>
-        </a>
+        <div class="row bez-apoteka"> 
+            <div class="col-6">
+                <a class="text-muted" asp-page="./DodajApoteku">
+                    <h5 class="obavestenje"> <ion-icon name="add-circle-outline"></ion-icon> Trenutno nema apoteka! Napravite prvi!</h5>
+                </a>
+            </div>
+            <div class="col-6">
+                <img src="~/images/add.svg" alt="Apoteka">
+            </div>
+        </div>
     }
 <div class="row">
     @foreach (var apoteka in @Model.Apoteke)
