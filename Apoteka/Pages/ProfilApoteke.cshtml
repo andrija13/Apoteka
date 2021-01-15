@@ -13,7 +13,7 @@
 
 <link href="~/css/ProfilApoteke.css" rel="stylesheet" />
 
-<div class="row">
+<div class="row sadrzaj">
         <div class="col-md-4">
             <div class="text-center">
                 <form method="post">
@@ -178,11 +178,11 @@
                             </div>
                             @for (var i = 0; i < @Model.Lokacije.Count; i++)
                             {
-                                var r = "Lokacije_" + i + "__Sel";
+                                var r = "Lokacije_" + i + "__SelZah";
                                 <div class="row lokacije">
                                     <div class="col-6 checkbox">
                                         <td class="js-export-checkbox">
-                                            @Html.CheckBoxFor(m => m.Lokacije[i].Sel)
+                                            @Html.CheckBoxFor(m => m.Lokacije[i].SelZah)
                                         </td>
                                         <label for="@r">@Model.Lokacije[i].Grad - @Model.Lokacije[i].UlicaBr</label>
                                     </div>

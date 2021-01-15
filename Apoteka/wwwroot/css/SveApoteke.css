@@ -7,8 +7,9 @@
     box-shadow: 0 0 15px 0 rgba(0,0,0,0.25);
     padding: 45px;
     font-family: 'Roboto';
+    margin-bottom: 25px;
 }
-.row{
+.sadrzaj{
     padding: 25px 0 25px 0;
 }
 .pozadina{

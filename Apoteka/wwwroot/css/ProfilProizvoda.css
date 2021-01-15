@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
 
-.row{
+.sadrzaj{
     display: grid;
     place-items: center;
     padding-top: 45px;

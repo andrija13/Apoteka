@@ -265,9 +265,8 @@ namespace Apoteka.Pages
 
             foreach (Lokacija l in Lokacije)
             {
-                if (l.Sel == true)
+                if (l.SelZah == true)
                     MojeLokacije.Add(l);
-
             }
 
             foreach (Lokacija ml in MojeLokacije)
