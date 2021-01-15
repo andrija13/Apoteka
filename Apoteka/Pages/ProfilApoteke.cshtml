@@ -93,7 +93,7 @@
                                     <td><input type="text" id="cc_@a" class="form-control" asp-for="@Model.Lokacije[i].UlicaBr" disabled></td>
                                     <td><input type="text" id="dd_@a" class="form-control" asp-for="@Model.Lokacije[i].BrojTelefona" disabled></td>
                                     <input type="text" id="aa_@a" class="form-control" asp-for="@Model.Lokacije[i].ID" hidden>
-                                    <td> <button type="submit" onclick="obrisi(@a,this)" asp-route-idlok="@Model.Lokacije[i].ID" asp-page-handler="UkloniLokaciju" class="btn btn-outline-danger sacuvaj" hidden><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
+                                    <td> <button onclick="otkazi()" type="submit" asp-route-idlok="@Model.Lokacije[i].ID" asp-page-handler="UkloniLokaciju" class="btn btn-outline-danger sacuvaj" hidden><ion-icon name="trash-outline" style="vertical-align:-2px;"></ion-icon></button></td>
                                 </tr>
                             }
 
@@ -346,9 +346,9 @@
         var adresa = document.getElementById("cc_" + idLok);
         var broj = document.getElementById("dd_" + idLok);
 
-        grad.setAttribute('id', "obrisano");
-        adresa.setAttribute('id', "obrisan");
-        broj.setAttribute('id', "obrisani");
+        grad.removeAttribute('name');
+        adresa.removeAttribute('name');
+        broj.removeAttribute('name');
 
         grad.hidden = true;
 

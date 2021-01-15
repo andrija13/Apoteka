@@ -138,17 +138,17 @@ namespace Apoteka.Pages
             }
 
         if (Ima.Count > 0){
-                query = Ima.Select(x => x).OrderBy(x => x.Cena);
+                query = Ima.Select(x => x).OrderBy(x => Int32.Parse(x.Cena));
 
                 if (!string.IsNullOrEmpty(SortirajPoFilter))
                 {
                     if (SortirajPoFilter == "Najjeftinije")
                     {
-                        query = Ima.Select(x => x).OrderBy(x => x.Cena);
+                        query = Ima.Select(x => x).OrderBy(x => Int32.Parse(x.Cena));
                     }
                     if (SortirajPoFilter == "Najskuplje")
                     {
-                        query = Ima.Select(x => x).OrderByDescending(x => x.Cena);
+                        query = Ima.Select(x => x).OrderByDescending(x => Int32.Parse(x.Cena));
                     }
                 }
 
@@ -171,11 +171,11 @@ namespace Apoteka.Pages
                 {
                     if (SortirajPoFilter == "Najjeftinije")
                     {
-                        query = Ima.Select(x => x).Where(x=>x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderBy(x => x.Cena);
+                        query = Ima.Select(x => x).Where(x=>x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderBy(x => Int32.Parse(x.Cena));
                     }
                     if (SortirajPoFilter == "Najskuplje")
                     {
-                        query = Ima.Select(x => x).Where(x => x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderByDescending(x => x.Cena);
+                        query = Ima.Select(x => x).Where(x => x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderByDescending(x => Int32.Parse(x.Cena));
                     }
                 }
 
@@ -183,11 +183,11 @@ namespace Apoteka.Pages
                 {
                     if (SortirajPoFilter == "Najjeftinije")
                     {
-                        query = Ima.Select(x => x).Where(x => x.LokacijaVeza.Grad == GradFilter).OrderBy(x => x.Cena);
+                        query = Ima.Select(x => x).Where(x => x.LokacijaVeza.Grad == GradFilter).OrderBy(x => Int32.Parse(x.Cena));
                     }
                     if (SortirajPoFilter == "Najskuplje")
                     {
-                        query = Ima.Select(x => x).Where(x => x.LokacijaVeza.Grad == GradFilter).OrderByDescending(x => x.Cena);
+                        query = Ima.Select(x => x).Where(x => x.LokacijaVeza.Grad == GradFilter).OrderByDescending(x => Int32.Parse(x.Cena));
                     }
                 }
 
@@ -195,11 +195,11 @@ namespace Apoteka.Pages
                 {
                     if (SortirajPoFilter == "Najjeftinije")
                     {
-                        query = Ima.Select(x => x).Where(x => x.LokacijaVeza.Grad == GradFilter && x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderBy(x => x.Cena);
+                        query = Ima.Select(x => x).Where(x => x.LokacijaVeza.Grad == GradFilter && x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderBy(x => Int32.Parse(x.Cena));
                     }
                     if (SortirajPoFilter == "Najskuplje")
                     {
-                        query = Ima.Select(x => x).Where(x => x.LokacijaVeza.Grad == GradFilter && x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderByDescending(x => x.Cena);
+                        query = Ima.Select(x => x).Where(x => x.LokacijaVeza.Grad == GradFilter && x.ProizvodVeza.Naziv.StartsWith(FilterNaziv.ToUpper())).OrderByDescending(x => Int32.Parse(x.Cena));
                     }
                 }
 
