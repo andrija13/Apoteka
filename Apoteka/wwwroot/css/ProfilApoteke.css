@@ -1,7 +1,7 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
 
 .sadrzaj{
-    flex-wrap: nowrap;
+    /* flex-wrap: nowrap; */
 }
 .col-md-8 h4{
     font-family: 'Roboto', sans-serif;
@@ -95,4 +95,10 @@ table td input{
 }
 .mojdiv{
     display:flex;
+}
+
+@media only screen and (max-width: 768px) {
+    .img-circle{
+        width: 80% !important;
+    }
 }

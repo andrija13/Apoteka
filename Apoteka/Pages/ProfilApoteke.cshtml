@@ -6,6 +6,8 @@
     {
         photoPath = "~/images/" + Model.Apoteka.Slika;
     }
+
+    ViewData["Title"] = "Profil apoteke";
 }
 @inject SignInManager<Korisnik> SignInManager
 @inject UserManager<Korisnik> UserManager
@@ -61,7 +63,7 @@
                 <input asp-for="Apoteka.BrojTelefona" class="form-control izmena" disabled />
             </div>
             <div class="form-group sacuvaj" hidden>
-                <label>Vas novi logo: </label>
+                <label>Vaš novi logo: </label>
                 <div class="custom-file" style="text-align:left; white-space:nowrap;">
                     <input asp-for="Photo" class="custom-file-input form-control" />
                     <label class="custom-file-label">Izaberite fotografiju...</label>
@@ -116,7 +118,7 @@
                             <div class="form-group">
                                 <label for="TipProizvoda">Izaberite proizvod: </label>
                                 <select class="form-control zahtev" asp-for="@Model.IzabraniProizvod" asp-items="@Model.SviProizvodi" id="TipProizvoda" required>
-                                    <option value="" selected disabled hidden>Prikazi proizvode:</option>
+                                    <option value="" selected disabled hidden>Prikaži proizvode:</option>
                                 </select>
                                 @for (var i = 0; i < @Model.Lokacije.Count; i++)
                                 {
@@ -162,7 +164,7 @@
                                 <input asp-for="ZahtevaniProizvod.Kategorija" class="form-control zahtev1" required />
                             </div>
                             <div class="form-group">
-                                <label asp-for="ZahtevaniProizvod.Proizvodjac">Proizvodjac: </label>
+                                <label asp-for="ZahtevaniProizvod.Proizvodjac">Proizvođač: </label>
                                 <input asp-for="ZahtevaniProizvod.Proizvodjac" class="form-control zahtev1" required />
                             </div>
                             <div class="form-group">
@@ -214,7 +216,7 @@
                             <thead style="color: #8c8c8c;">
                             <th>Naziv</th>
                             <th>Kategorija</th>
-                            <th>Proizvodjac</th>
+                            <th>Proizvođač</th>
                             <th>Cena(din.)</th>
                             </thead>
                             <tbody id="tbody">
@@ -253,7 +255,7 @@
             }
 
 
-            <button type="submit" onclick="otkazi()" class="btn btn-success sacuvaj dugme" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sacuvaj</button>
+            <button type="submit" onclick="otkazi()" class="btn btn-success sacuvaj dugme" id="Sacuvajbtn" asp-page-handler="SacuvajApoteku" hidden>Sačuvaj</button>
         </form>
 
     </div>
@@ -346,15 +348,10 @@
         var adresa = document.getElementById("cc_" + idLok);
         var broj = document.getElementById("dd_" + idLok);
 
-        grad.removeAttribute('name');
-        adresa.removeAttribute('name');
-        broj.removeAttribute('name');
-
-        grad.hidden = true;
-
-        adresa.hidden = true;
-        broj.hidden = true;
-        dugme.hidden = true;
+        grad.remove();
+        adresa.remove();
+        broj.remove();
+        dugme.remove();
     }
 
 </script>

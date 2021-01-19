@@ -8,7 +8,7 @@
 @inject UserManager<Korisnik> UserManager
 @inject RoleManager<Neo4j.AspNetCore.Identity.IdentityRole> _roleManager
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Početna";
 }
 @{
     Layout = "";
@@ -18,21 +18,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Nadji Lek</title>
+    <title>@ViewData["Title"] - Nađi Lek</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/HomePage.css">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Nadji Lek</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Nađi Lek</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <div class="navbar-collapse collapse d-lg-inline-flex flex-lg-row-reverse">
                     <ul class="navbar-nav">
                         @if (SignInManager.IsSignedIn(User))
                         {
@@ -42,10 +42,10 @@
                             <li class="nav-item">
                                 <a id="manage" class="nav-link" asp-page="/DodajApoteku" title="Manage">Dodaj Apoteku</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item d-flex justify-content-center mb-2">
                                 <a id="manage" class="nav-link btn register" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><ion-icon style="font-size: 18px; vertical-align: -3px;" name="person-circle-outline"></ion-icon> Moj Profil</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item d-flex justify-content-center mb-2">
                                 <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
                                     <button id="logout" type="submit" class="nav-link btn logout">Odjavi se</button>
                                 </form>
@@ -56,21 +56,19 @@
                             <li class="nav-item">
                                 <a id="manage" class="nav-link" asp-page="/SveApoteke">Sve Apoteke</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item d-flex justify-content-center mb-2">
                                 <a class="nav-link btn register" id="register" asp-area="Identity" asp-page="/Account/Register">Registruj se</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item d-flex justify-content-center mb-2">
                                 <a class="nav-link btn login" id="login" asp-area="Identity" asp-page="/Account/Login">Prijavi se</a>
                             </li>
                         }
                     </ul>
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Index">Pocetna</a>
+                            <a class="nav-link" asp-area="" asp-page="/Index">Početna</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Privacy">O nama</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -80,7 +78,7 @@
         <div class="row hero">
             <div class="col-md-6 wlcm-section">
                 <h1>Dobro došli!</h1>
-                <h5>Vaše mesto za sigurnu online<br> kupovinu.</h5><br>
+                <h5>Vaše mesto za siguran <br> izbor.</h5><br>
                 <a  href="#search"><button class="btn">Istraži</button></a>
             </div>
             <div class="col-md-6 img-section">
@@ -91,7 +89,7 @@
     <div class="container-fluid catalog">
         <form class="row" id="formID" method="get">
             <div id="search" class="container search-box">
-                <div class="filter" style="display:flex;">
+                <div class="filter" style="display:flex; place-items: center;">
                     <input type="text" class="form-control" asp-for="@Model.FilterNaziv" placeholder="Unesite naziv leka"/>
                     <select class="form-control"  asp-for="@Model.GradFilter" asp-items="@Model.GradoviFilter" id="Grad">
                         <option value="" selected >Izaberite grad</option>
@@ -113,13 +111,13 @@
                         {
                             photoPath = "~/images/" + proizvod.ProizvodVeza.Slika;
                         }
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 d-flex justify-content-center mb-4">
                                 <div class="card">
                                     <a class="text-dark" asp-route-Id="@proizvod.ProizvodVeza.ID" asp-page="/ProfilProizvoda"> <img class="card-img-top" src="@photoPath" alt="Card image cap" asp-append-version="true" /><h5 class="card-header">@proizvod.ProizvodVeza.Naziv</h5></a>
                                     <div class="card-body">
                                         <h5 class="card-title">@proizvod.ProizvodVeza.Kategorija</h5>
                                         <p class="card-text desc">Opis: @proizvod.ProizvodVeza.Opis</p>
-                                        <p class="card-text">Proizvodjac: @proizvod.ProizvodVeza.Proizvodjac</p>
+                                        <p class="card-text">Proizvođač: @proizvod.ProizvodVeza.Proizvodjac</p>
                                         <p class="card-text">U apoteci @proizvod.ApootekaVeza.Naziv - @proizvod.LokacijaVeza.Grad po ceni od @proizvod.Cena din.</p>
 
                                     </div>
@@ -145,7 +143,7 @@
     <div class="container-fluid footer">
         <div class="row">
             <p>Sva prava zadržana</p><br>
-            <p>&copy; 2021 - Nadji Lek </p>
+            <p>&copy; 2021 - Nađi Lek </p>
         </div>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -6,6 +6,8 @@
     {
         photoPath = "~/images/" + Model.Proizvod.Slika;
     }
+
+    ViewData["Title"] = "Profil proizvoda";
 }
 <link href="~/css/ProfilProizvoda.css" rel="stylesheet" />
 <div class="row sadrzaj">
@@ -26,7 +28,7 @@
                     <input type="text" asp-for="@Model.Proizvod.Opis" class="form-control izmena" disabled />
                 </div>
                 <div class="form-group">
-                    <label asp-for="@Model.Proizvod.Proizvodjac">Proizvodjac: </label>
+                    <label asp-for="@Model.Proizvod.Proizvodjac">Proizvođač: </label>
                     <input asp-for="@Model.Proizvod.Proizvodjac" class="form-control izmena" disabled />
                 </div>
 

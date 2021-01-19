@@ -50,7 +50,7 @@ namespace Apoteka.Areas.Identity.Pages.Account.Manage
             public string Email { get; set; }
 
             [Phone]
-            [Display(Name = "Broj Telefona")]
+            [Display(Name = "Broj telefona")]
             public string PhoneNumber { get; set; }
 
             [Required]
